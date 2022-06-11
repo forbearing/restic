@@ -1,11 +1,23 @@
 package restic
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestConcatGlobalFlag(t *testing.T) {
-	f := new(GlobalFlags)
-	f.Cacert = []string{"/etc/cacert.pem"}
+	option := make(map[string]string)
+	option["name"] = "restic"
+	option["type"] = "backup"
+	f := &GlobalFlags{
+		Cacert:       []string{"./testdata/certs/example.com.crt", "./testdata/certs/nginx.example.com.crt"},
+		CacheDir:     "/tmp/cache",
+		CleanupCache: true,
+		InsecureTls:  true,
+		Option:       option,
+		Json:         false,
+		//Repo:         "./testdata/repo",
+	}
 
-	s := ConcatFlags(f)
+	s := concatAll(f)
 	t.Log(s)
 }

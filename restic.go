@@ -1,12 +1,8 @@
 package restic
 
 import (
-	"bufio"
 	"context"
-	"errors"
-	"fmt"
 	"io"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -27,6 +23,25 @@ type Restic struct {
 	ctx      context.Context
 	waitDone chan struct{}
 	l        sync.Mutex
+}
+
+// New
+func New(ctx context.Context, fl ...Flag) (*Restic, error) {
+	r := new(Restic)
+
+	path, err := exec.LookPath("restic")
+	if err != nil {
+		return nil, err
+	}
+	r.cmdName = filepath.Base(path)
+
+	// concat all restic command and sub-commands flags
+	for _, f := range fl {
+		r.cmdArgs = r.cmdArgs + f.Concat()
+	}
+	r.CmdString = r.cmdName + r.cmdArgs
+
+	return r, nil
 }
 
 // Run
@@ -57,72 +72,4 @@ func (r *Restic) Run() error {
 	}
 
 	return nil
-}
-
-func New(ctx context.Context) (*Restic, error) {
-	r := new(Restic)
-
-	path, err := exec.LookPath("restic")
-	if err != nil {
-		return nil, err
-	}
-	r.cmdName = filepath.Base(path)
-
-	r.CmdString = r.cmdName + r.cmdArgs
-
-	return r, nil
-}
-
-// print is used to output stdout and stderr in real time.
-func print(stdout, stderr io.ReadCloser, done chan struct{}) {
-	stopCh := make(chan struct{}, 2)
-	defer stdout.Close()
-	defer stderr.Close()
-	//errCh := make(chan error, 2)
-
-	// A goroutine that outputs stdout in real time.
-	go func() {
-		defer func() {
-			stopCh <- struct{}{}
-		}()
-		scanner := bufio.NewScanner(stdout)
-		scanner.Split(bufio.ScanBytes)
-		for scanner.Scan() {
-			fmt.Printf("%s", scanner.Text())
-		}
-		err := scanner.Err()
-		// if stdout already closed, stop the goroutine.
-		if errors.Is(err, os.ErrClosed) {
-			return
-		}
-		if err != nil {
-			fmt.Println("scanner output stdout error:", err)
-			return
-		}
-	}()
-
-	// A goroutine that outputs stderr in real time.
-	go func() {
-		defer func() {
-			stopCh <- struct{}{}
-		}()
-		scanner := bufio.NewScanner(stderr)
-		scanner.Split(bufio.ScanBytes)
-		for scanner.Scan() {
-			fmt.Printf("%s", scanner.Text())
-		}
-		err := scanner.Err()
-		// if stderr already closed, stop the goroutine.
-		if errors.Is(err, os.ErrClosed) {
-			return
-		}
-		if err != nil {
-			fmt.Println("scanner output stderr error:", err)
-			return
-		}
-	}()
-
-	<-stopCh
-	<-stopCh
-	done <- struct{}{}
 }

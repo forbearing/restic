@@ -1,97 +1,138 @@
 package restic
 
-import (
-	"fmt"
-	"reflect"
-)
-
 // - GlobalFlags includes all restic global flags.
 // - Restic is a backup system which allows saving multiple revisions of files
 //  and directories in an encrypted repository stored on different backends.
 type GlobalFlags struct {
 	// --cacert=[]
 	// file to load root certificates from (default: use system certificates)
-	Cacert []string
+	Cacert []string `json:"--cacert"`
 	// --cache-dir=""
 	// set the cache directory. (default: use system default cache directory)
-	CacheDir string
+	CacheDir string `json:"--cache-dir"`
 	// --cleanup-cache[=false]
 	// auto remove old cache directories
-	CleanupCache bool
+	CleanupCache bool `json:"--cleanup-cache"`
 	// -h, --help[=false]
 	// help for restic
-	Help bool
+	Help bool `jons:"--help"`
 	// --insecure-tls[=false]
 	// skip TLS certificate verification when connecting to the repo (insecure)
-	InsecureTls bool
+	InsecureTls bool `json:"--insecure-tls"`
 	// --json[=false]
 	// set output mode to JSON for commands that support it
-	Json bool
+	Json bool `json:"--json"`
 	// --key-hint=""
 	// key ID of key to try decrypting first (default: $RESTIC_KEY_HINT)
-	KeyHint string
+	KeyHint string `json:"--key-hint"`
 	// --limit-download=0
 	// limits downloads to a maximum rate in KiB/s. (default: unlimited)
-	LimitDownload int64
+	LimitDownload int64 `json:"--limit-download"`
 	// --limit-upload=0
 	// limits uploads to a maximum rate in KiB/s. (default: unlimited)
-	LimitUpload int64
+	LimitUpload int64 `json:"--limit-upload"`
 	// --no-cache[=false]
 	// do not use a local cache
-	NoCache bool
+	NoCache bool `json:"--no-cache"`
 	// --no-lock[=false]
 	// do not lock the repository, this allows some operations on read-only repositories
-	NoLock bool
+	NoLock bool `json:"--no-lock"`
 	// -o, --option=[]
 	// set extended option (key=value, can be specified multiple times)
-	Option map[string]string
+	Option map[string]string `json:"--option"`
 	// --password-command=""
 	// shell command to obtain the repository password from (default: $RESTIC_PASSWORD_COMMAND)
-	PasswordCommand string
+	PasswordCommand string `json:"--password-command"`
 	// -p, --password-file=""
 	// file to read the repository password from (default: $RESTIC_PASSWORD_FILE)
-	PasswordFile string
+	PasswordFile string `json:"--passwod-file"`
 	// -q, --quiet[=false]
 	// do not output comprehensive progress report
-	Quiet bool
+	Quiet bool `json:"--quiet"`
 	// -r, --repo=""
 	// repository to backup to or restore from (default: $RESTIC_REPOSITORY)
-	Repo string
+	Repo string `json:"--repo"`
 	// --repository-file=""
 	// file to read the repository location from (default: $RESTIC_REPOSITORY_FILE)
-	RepositoryFile string
+	RepositoryFile string `json:"--repository-file"`
 	// --tls-client-cert=""
 	// path to a file containing PEM encoded TLS client certificate and private key
-	TlsClientCert string
+	TlsClientCert string `json:"--tls-client-cert"`
 	// -v, --verbose[=0]
 	// be verbose (specify multiple times or a level using --verbose=n, max level/times is 3)
-	Verbose int
+	Verbose int `json:"--verbose"`
 }
 
 // ref:
 //     https://stackoverflow.com/questions/42294015/how-to-use-go-reflection-pkg-to-get-the-type-of-a-slice-struct-field
 // Concat implements interface Flag
 func (f *GlobalFlags) Concat() string {
-	var s string
-	v := reflect.ValueOf(f).Elem()
-
-	for i := 0; i < v.NumField(); i++ {
-		val := v.Field(i).Interface()
-		field := v.Field(i)
-		name := v.Type().Field(i).Name
-		kind := v.Field(i).Kind()
-		typ := field.Type().String()
-		fmt.Printf("Name: %s  Kind: %s  Type: %s  Value: %s\n", name, kind, typ, val)
-
-		//switch typ {
-		//case "string":
-		//case "[]string":
-		//case "int":
-		//case "int64":
-		//case "bool":
-		//case "map[string]string":
-		//}
-	}
-
+	s := concat(f)
 	return s
+	//var s string
+	//t := reflect.TypeOf(f).Elem()
+	//v := reflect.ValueOf(f).Elem()
+
+	//for i := 0; i < v.NumField(); i++ {
+	//    kind := v.Field(i).Kind()
+	//    typ := v.Field(i).Type().String()
+	//    tag := t.Field(i).Tag.Get("json")
+	//    val := v.Field(i).Interface()
+	//    name := v.Type().Field(i).Name
+
+	//    _ = kind
+	//    _ = typ
+	//    _ = tag
+	//    _ = name
+	//    _ = val
+
+	//    switch typ {
+	//    case "string":
+	//        l, ok := val.(string)
+	//        if ok {
+	//            if l == "" {
+	//                continue
+	//            }
+	//            s = s + " " + tag + "=" + l
+	//        }
+	//    case "[]string":
+	//        l, ok := val.([]string)
+	//        if ok {
+	//            if l == nil {
+	//                continue
+	//            }
+	//            s = s + " " + tag + "=" + strings.Join(l, ",")
+	//        }
+	//    case "int":
+	//        l, ok := val.(int)
+	//        if ok {
+	//            s = s + " " + tag + "=" + strconv.Itoa(l)
+	//        }
+	//    case "int64":
+	//        l, ok := val.(int64)
+	//        if ok {
+	//            s = s + " " + tag + "=" + strconv.FormatInt(l, 10)
+	//        }
+	//    case "bool":
+	//        l, ok := val.(bool)
+	//        if ok {
+	//            if l == false {
+	//                continue
+	//            }
+	//            s = s + " " + tag
+	//        }
+	//    case "map[string]string":
+	//        l, ok := val.(map[string]string)
+	//        if ok {
+	//            var ts string
+	//            for key, val := range l {
+	//                ts = ts + key + "=" + val + ","
+	//            }
+	//            ts = strings.TrimSuffix(ts, ",")
+	//            s = s + " " + tag + "=" + ts
+	//        }
+	//    }
+	//}
+
+	//return s
 }
