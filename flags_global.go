@@ -2,7 +2,7 @@ package restic
 
 // - GlobalFlags includes all restic global flags.
 // - Restic is a backup system which allows saving multiple revisions of files
-//  and directories in an encrypted repository stored on different backends.
+//   and directories in an encrypted repository stored on different backends.
 type GlobalFlags struct {
 	// --cacert=[]
 	// file to load root certificates from (default: use system certificates)
@@ -67,72 +67,5 @@ type GlobalFlags struct {
 //     https://stackoverflow.com/questions/42294015/how-to-use-go-reflection-pkg-to-get-the-type-of-a-slice-struct-field
 // Concat implements interface Flag
 func (f *GlobalFlags) Concat() string {
-	s := concat(f)
-	return s
-	//var s string
-	//t := reflect.TypeOf(f).Elem()
-	//v := reflect.ValueOf(f).Elem()
-
-	//for i := 0; i < v.NumField(); i++ {
-	//    kind := v.Field(i).Kind()
-	//    typ := v.Field(i).Type().String()
-	//    tag := t.Field(i).Tag.Get("json")
-	//    val := v.Field(i).Interface()
-	//    name := v.Type().Field(i).Name
-
-	//    _ = kind
-	//    _ = typ
-	//    _ = tag
-	//    _ = name
-	//    _ = val
-
-	//    switch typ {
-	//    case "string":
-	//        l, ok := val.(string)
-	//        if ok {
-	//            if l == "" {
-	//                continue
-	//            }
-	//            s = s + " " + tag + "=" + l
-	//        }
-	//    case "[]string":
-	//        l, ok := val.([]string)
-	//        if ok {
-	//            if l == nil {
-	//                continue
-	//            }
-	//            s = s + " " + tag + "=" + strings.Join(l, ",")
-	//        }
-	//    case "int":
-	//        l, ok := val.(int)
-	//        if ok {
-	//            s = s + " " + tag + "=" + strconv.Itoa(l)
-	//        }
-	//    case "int64":
-	//        l, ok := val.(int64)
-	//        if ok {
-	//            s = s + " " + tag + "=" + strconv.FormatInt(l, 10)
-	//        }
-	//    case "bool":
-	//        l, ok := val.(bool)
-	//        if ok {
-	//            if l == false {
-	//                continue
-	//            }
-	//            s = s + " " + tag
-	//        }
-	//    case "map[string]string":
-	//        l, ok := val.(map[string]string)
-	//        if ok {
-	//            var ts string
-	//            for key, val := range l {
-	//                ts = ts + key + "=" + val + ","
-	//            }
-	//            ts = strings.TrimSuffix(ts, ",")
-	//            s = s + " " + tag + "=" + ts
-	//        }
-	//    }
-	//}
-
-	//return s
+	return concat(f)
 }
