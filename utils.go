@@ -72,23 +72,30 @@ func concat(f interface{}) string {
 	v := reflect.ValueOf(f).Elem()
 
 	for i := 0; i < v.NumField(); i++ {
+		// PkgPath is the package path that qualified a lows case (unexported)
+		// field name. It is empty for upper case (exported) field names.
+		// Skip unexported fields
+		if len(t.Field(i).PkgPath) != 0 {
+			continue
+		}
 		knd := v.Field(i).Kind()
 		typ := v.Field(i).Type().String()
-		tag := t.Field(i).Tag.Get("json")
 		val := v.Field(i).Interface()
-		nam := v.Type().Field(i).Name
+		nam := t.Field(i).Name
+		//nam := v.Type().Field(i).Name
+		tag := t.Field(i).Tag.Get("json")
 
 		_ = knd
 		_ = typ
-		_ = tag
-		_ = nam
 		_ = val
+		_ = nam
+		_ = tag
 
 		switch typ {
 		case "string":
 			l, ok := val.(string)
 			if ok {
-				if l == "" {
+				if len(l) == 0 {
 					continue
 				}
 				s = s + " " + tag + "=" + l
@@ -139,7 +146,7 @@ func concat(f interface{}) string {
 func concatAll(fl ...Flag) string {
 	var s string
 	for _, f := range fl {
-		s = s + f.Concat()
+		s = s + f.Flags()
 	}
 	return s
 }
