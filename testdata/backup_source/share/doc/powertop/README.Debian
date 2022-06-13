@@ -1,0 +1,23 @@
+When you run powertop the first time (or second time), you might see
+the following message:
+
+> Loaded 100 prior measurements
+> Cannot load from file /var/cache/powertop/saved_parameters.powertop
+> File will be loaded after taking minimum number of measurement(s) with battery only
+
+This is not a bug. As the messages shown, you have to run powertop and
+wait it to collect enough data in order to create the
+saved_parameters.powertop file. Depending on the system, the maximum
+requirement is 2250 measurements. The process may take one or two
+hours.
+
+Do not rename `/var/cache/powertop/saved_results.powertop to
+saved_parameters.powertop.
+
+While this silence the program, it is not correct. The parameters are
+models to improve the prediction of power consumption. Try running the
+program longer while doing your normal workload.
+
+See also: the -c, --calibrate option in manpage powertop(8)
+
+ -- Kan-Ru Chen (陳侃如) <koster@debian.org>, Fri,  3 Jan 2020 23:28:52 +0900
