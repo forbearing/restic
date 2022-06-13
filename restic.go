@@ -2,7 +2,6 @@ package restic
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"os/exec"
 	"path/filepath"
@@ -13,7 +12,7 @@ import (
 // Name return command name.
 // Flags return the command all concatenated flags.
 // Args return the command all arguments.
-type Flag interface {
+type Command interface {
 	Name() string
 	Flags() string
 	Args() string
@@ -35,7 +34,7 @@ type Restic struct {
 }
 
 // New returns a restic instance.
-func New(ctx context.Context, fl ...Flag) (*Restic, error) {
+func New(ctx context.Context, g *GlobalFlags) (*Restic, error) {
 	r := new(Restic)
 
 	path, err := exec.LookPath("restic")
@@ -44,23 +43,38 @@ func New(ctx context.Context, fl ...Flag) (*Restic, error) {
 	}
 	r.resticName = filepath.Base(path)
 
-	// concat all restic command and sub-commands flags
-	for _, f := range fl {
-		// if the length of the string returned by the Name method is equal to 0
-		// it indicates f is restic global flags.
-		if len(f.Name()) == 0 {
-			r.globalFlags = f.Flags()
-			continue
-		}
-		if len(r.cmdName) != 0 {
-			return nil, fmt.Errorf("restic command %q already set", r.cmdName)
-		}
-		r.cmdName = f.Name()
-		r.cmdFlags = f.Flags()
-		r.cmdArgs = f.Args()
-	}
+	r.globalFlags = g.Flags()
 
 	return r, nil
+}
+
+func (r *Restic) Command(c Command) *Restic {
+	r.cmdName = c.Name()
+	r.cmdFlags = c.Flags()
+	r.cmdArgs = c.Args()
+	return r
+}
+
+// String returns restic commmand line
+// such like "restic --limit-upload=0 -v=0 snapshots --tag=mytag --host=myhost"
+func (r *Restic) String() string {
+	builder := new(strings.Builder)
+
+	builder.WriteString(r.resticName + " ")
+	builder.WriteString(r.globalFlags + " ")
+	builder.WriteString(r.cmdName + " ")
+	// If r.cmdFlags is empty string, builder.WriteString will add one more
+	// space to restic command line.
+	// It necessary to ignore it when r.cmdFlags is empty.
+	if len(r.cmdFlags) != 0 {
+		builder.WriteString(r.cmdFlags + " ")
+	}
+	// cmdArgs is the same as r.cmdFlags.
+	if len(r.cmdArgs) != 0 {
+		builder.WriteString(r.cmdArgs)
+	}
+
+	return builder.String()
 }
 
 // Run start execute restic command line
@@ -93,18 +107,4 @@ func (r *Restic) Run() error {
 	}
 
 	return nil
-}
-
-// String returns restic commmand line
-// such like "restic --limit-upload=0 -v=0 snapshots --tag=mytag --host=myhost"
-func (r *Restic) String() string {
-	builder := new(strings.Builder)
-
-	builder.WriteString(r.resticName + " ")
-	builder.WriteString(r.globalFlags + " ")
-	builder.WriteString(r.cmdName + " ")
-	builder.WriteString(r.cmdFlags + " ")
-	builder.WriteString(r.cmdArgs)
-
-	return builder.String()
 }

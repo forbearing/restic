@@ -99,6 +99,7 @@ func concat(f interface{}) string {
 					continue
 				}
 				s = s + " " + tag + "=" + l
+				s = strings.TrimSpace(s)
 			}
 		case "[]string":
 			l, ok := val.([]string)
@@ -107,16 +108,19 @@ func concat(f interface{}) string {
 					continue
 				}
 				s = s + " " + tag + "=" + strings.Join(l, ",")
+				s = strings.TrimSpace(s)
 			}
 		case "int":
 			l, ok := val.(int)
 			if ok {
 				s = s + " " + tag + "=" + strconv.Itoa(l)
+				s = strings.TrimSpace(s)
 			}
 		case "int64":
 			l, ok := val.(int64)
 			if ok {
 				s = s + " " + tag + "=" + strconv.FormatInt(l, 10)
+				s = strings.TrimSpace(s)
 			}
 		case "bool":
 			l, ok := val.(bool)
@@ -125,6 +129,7 @@ func concat(f interface{}) string {
 					continue
 				}
 				s = s + " " + tag
+				s = strings.TrimSpace(s)
 			}
 		case "map[string]string":
 			l, ok := val.(map[string]string)
@@ -135,6 +140,7 @@ func concat(f interface{}) string {
 				}
 				ts = strings.TrimSuffix(ts, ",")
 				s = s + " " + tag + "=" + ts
+				s = strings.TrimSpace(s)
 			}
 		}
 	}
@@ -143,10 +149,10 @@ func concat(f interface{}) string {
 }
 
 // concatFlags will concat restic and it's sub-commands all flags
-func concatAll(fl ...Flag) string {
+func concatAll(cl ...Command) string {
 	var s string
-	for _, f := range fl {
-		s = s + f.Flags()
+	for _, c := range cl {
+		s = s + c.Flags()
 	}
 	return s
 }
