@@ -1,5 +1,7 @@
 package restic
 
+import "strings"
+
 // - GlobalFlags includes all restic global flags.
 // - Restic is a backup system which allows saving multiple revisions of files
 //   and directories in an encrypted repository stored on different backends.
@@ -61,11 +63,28 @@ type GlobalFlags struct {
 	// -v, --verbose[=0]
 	// be verbose (specify multiple times or a level using --verbose=n, max level/times is 3)
 	Verbose int `json:"--verbose"`
+
+	args strings.Builder
 }
 
 // ref:
 //     https://stackoverflow.com/questions/42294015/how-to-use-go-reflection-pkg-to-get-the-type-of-a-slice-struct-field
 // Concat implements interface Flag
-func (f *GlobalFlags) Concat() string {
+func (f *GlobalFlags) Flags() string {
 	return concat(f)
+}
+
+func (f *GlobalFlags) Name() string {
+	return ""
+}
+
+func (f *GlobalFlags) Args() string {
+	return f.args.String()
+}
+
+func (f *GlobalFlags) SetArgs(args ...string) string {
+	for _, s := range args {
+		f.args.WriteString(s)
+	}
+	return f.Args()
 }

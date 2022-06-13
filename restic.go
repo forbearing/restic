@@ -2,6 +2,7 @@ package restic
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"os/exec"
 	"path/filepath"
@@ -9,15 +10,23 @@ import (
 	"sync"
 )
 
+// Name return command name.
+// Flags return the command all concatenated flags.
+// Args return the command all arguments.
 type Flag interface {
-	Concat() string
+	Name() string
+	Flags() string
+	Args() string
 }
 
 type Restic struct {
-	cmdName   string
-	cmdArgs   string
-	CmdString string
-	cmd       *exec.Cmd
+	resticName  string // like "restic", "restic_darwin_amd64"
+	globalFlags string // restic global flags
+	cmdName     string // restic sub-command name
+	cmdFlags    string // restic sub-command flags
+	cmdArgs     string // restic sub-command arguments
+
+	cmd *exec.Cmd
 
 	finished bool
 	ctx      context.Context
@@ -25,7 +34,7 @@ type Restic struct {
 	l        sync.Mutex
 }
 
-// New
+// New returns a restic instance.
 func New(ctx context.Context, fl ...Flag) (*Restic, error) {
 	r := new(Restic)
 
@@ -33,27 +42,40 @@ func New(ctx context.Context, fl ...Flag) (*Restic, error) {
 	if err != nil {
 		return nil, err
 	}
-	r.cmdName = filepath.Base(path)
+	r.resticName = filepath.Base(path)
 
 	// concat all restic command and sub-commands flags
 	for _, f := range fl {
-		r.cmdArgs = r.cmdArgs + f.Concat()
+		// if the length of the string returned by the Name method is equal to 0
+		// it indicates f is restic global flags.
+		if len(f.Name()) == 0 {
+			r.globalFlags = f.Flags()
+			continue
+		}
+		if len(r.cmdName) != 0 {
+			return nil, fmt.Errorf("restic command %q already set", r.cmdName)
+		}
+		r.cmdName = f.Name()
+		r.cmdFlags = f.Flags()
+		r.cmdArgs = f.Args()
 	}
-	r.CmdString = r.cmdName + r.cmdArgs
 
 	return r, nil
 }
 
-// Run
+// Run start execute restic command line
+// restic command line string returned by Restic.String() method.
 func (r *Restic) Run() error {
 	var (
-		done = make(chan struct{}, 1)
 		// done is a channel that wait goroutine to output stdout and stderr.
+		done   = make(chan struct{}, 1)
 		stdout io.ReadCloser
 		stderr io.ReadCloser
 		err    error
 	)
-	r.cmd = exec.Command(r.cmdName, strings.Fields(r.cmdArgs)...)
+
+	cmdString := strings.Fields(r.String())
+	r.cmd = exec.Command(cmdString[0], cmdString[1:]...)
 	if stdout, err = r.cmd.StdoutPipe(); err != nil {
 		return err
 	}
@@ -64,7 +86,6 @@ func (r *Restic) Run() error {
 	if err = r.cmd.Start(); err != nil {
 		return err
 	}
-
 	print(stdout, stderr, done)
 	<-done
 	if err = r.cmd.Wait(); err != nil {
@@ -72,4 +93,18 @@ func (r *Restic) Run() error {
 	}
 
 	return nil
+}
+
+// String returns restic commmand line
+// such like "restic --limit-upload=0 -v=0 snapshots --tag=mytag --host=myhost"
+func (r *Restic) String() string {
+	builder := new(strings.Builder)
+
+	builder.WriteString(r.resticName + " ")
+	builder.WriteString(r.globalFlags + " ")
+	builder.WriteString(r.cmdName + " ")
+	builder.WriteString(r.cmdFlags + " ")
+	builder.WriteString(r.cmdArgs)
+
+	return builder.String()
 }
