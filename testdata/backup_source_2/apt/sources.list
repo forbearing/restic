@@ -1,0 +1,12 @@
+# deb cdrom:[Debian GNU/Linux 11.2.0 _Bullseye_ - Official amd64 DVD Binary-1 20211218-11:13]/ bullseye contrib main
+
+deb http://mirrors.163.com/debian/ bullseye main
+deb-src http://mirrors.163.com/debian/ bullseye main
+
+deb http://security.debian.org/debian-security bullseye-security main contrib
+deb-src http://security.debian.org/debian-security bullseye-security main contrib
+
+# bullseye-updates, to get updates before a point release is made;
+# see https://www.debian.org/doc/manuals/debian-reference/ch02.en.html#_updates_and_backports
+deb http://mirrors.163.com/debian/ bullseye-updates main contrib
+deb-src http://mirrors.163.com/debian/ bullseye-updates main contrib
