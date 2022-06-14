@@ -4,6 +4,9 @@ import (
 	"context"
 	"os"
 	"testing"
+
+	"github.com/fatih/color"
+	"github.com/sirupsen/logrus"
 )
 
 // TODO:
@@ -15,8 +18,6 @@ func TestRestic(t *testing.T) {
 	defer cancel()
 
 	repo := "/tmp/restic_repo"
-	backupSource1 := "./testdata/backup_source_1"
-	backupSource2 := "./testdata/backup_source_2"
 	os.RemoveAll(repo)
 	os.Mkdir(repo, 0755)
 
@@ -33,6 +34,45 @@ func TestRestic(t *testing.T) {
 		Option:       gopt,
 		Repo:         repo,
 	}
+	restic, err := New(ctx, globalF)
+	if err != nil {
+		t.Error(err)
+	}
+	notice := color.New(color.Bold, color.FgGreen).PrintfFunc()
+
+	notice("\n\n----- test restic output to custom logger.\n\n")
+	l := logrus.New()
+	logw := l.Writer()
+	defer logw.Close()
+	restic.SetOutput(logw, logw)
+	testRestic(t, restic)
+
+	notice("\n\n----- test restic default output.\n\n")
+	testRestic(t, restic)
+
+	restic.SetOutput(os.Stdout, os.Stderr)
+	notice("\n\n----- test restic output to os.Stdout and os.Stderr.\n\n")
+	testRestic(t, restic)
+
+	stdoutFile, err := os.Create("/tmp/restic_stdout.log")
+	if err != nil {
+		t.Fatal("os.Create /tmp/restic_stdout.log error:", err)
+	}
+	defer stdoutFile.Close()
+	stderrFile, err := os.Create("/tmp/restic_stderr.log")
+	if err != nil {
+		t.Fatal("os.Create restic_stderr.log error:", err)
+	}
+	defer stderrFile.Close()
+	restic.SetOutput(stdoutFile, stderrFile)
+	notice("\n\n----- test restic output to file.\n\n")
+	testRestic(t, restic)
+}
+
+func testRestic(t *testing.T, restic *Restic) {
+	backupSource1 := "./testdata/backup_source_1"
+	backupSource2 := "./testdata/backup_source_2"
+
 	// init command
 	initC := &Init{}
 	// backup command
@@ -42,7 +82,7 @@ func TestRestic(t *testing.T) {
 	}
 	backupC.SetArgs(backupSource1, backupSource2)
 	// snapshots command
-	snapshotsC := &Snapshots{}
+	snapshotsC := &Snapshots{Latest: 1}
 	// list command
 	listC := &List{}
 	listC.SetArgs("snapshots")
@@ -72,57 +112,90 @@ func TestRestic(t *testing.T) {
 	migrateC := &Migrate{}
 	_ = migrateC
 
-	restic, err := New(ctx, globalF)
-	if err != nil {
-		t.Error(err)
-	}
+	notice := color.New(color.Bold, color.FgYellow).PrintlnFunc()
 
-	t.Log(restic.String())
-	t.Log(restic.Command(initC).String())
-	t.Log(restic.Command(backupC).String())
-	t.Log(restic.Command(snapshotsC).String())
-	t.Log(restic.Command(listC).String())
-	t.Log(restic.Command(cacheC).String())
-	t.Log(restic.Command(checkC).String())
-	t.Log(restic.Command(findC).String())
-	t.Log(restic.Command(forgetC).String())
-	t.Log(restic.Command(generateC).String())
-	t.Log(restic.Command(keyC).String())
-	t.Log(restic.Command(&Migrate{}).String())
-	t.Log(restic.Command(&Prune{}).String())
-	t.Log(restic.Command(&RebuildIndex{}).String())
-	t.Log(restic.Command(&Recover{}).String())
-	t.Log(restic.Command(&Stats{
+	notice(restic.String())
+	restic.Run()
+
+	// restic init
+	notice(restic.Command(initC).String())
+	restic.Command(initC).Run()
+
+	// restic backup
+	notice(restic.Command(backupC).String())
+	restic.Command(backupC).Run()
+	restic.Command(backupC).Run()
+	restic.Command(backupC).Run()
+	restic.Command(backupC).Run()
+
+	// rsetic snapshots
+	notice(restic.Command(snapshotsC).String())
+	restic.Command(snapshotsC).Run()
+
+	// restic list
+	notice(restic.Command(listC).String())
+	restic.Command(listC).Run()
+
+	// restic cache
+	notice(restic.Command(cacheC).String())
+	restic.Command(cacheC).Run()
+
+	// restic check
+	notice(restic.Command(checkC).String())
+	restic.Command(checkC).Run()
+
+	// restic find
+	notice(restic.Command(findC).String())
+	restic.Command(findC).Run()
+
+	// restic forget
+	notice(restic.Command(forgetC).String())
+	restic.Command(forgetC).Run()
+
+	// restic generate
+	notice(restic.Command(generateC).String())
+	restic.Command(generateC).Run()
+
+	// restic key
+	notice(restic.Command(keyC).String())
+	restic.Command(keyC).Run()
+
+	// restic migrate
+	notice(restic.Command(&Migrate{}).String())
+	restic.Command(&Migrate{}).Run()
+
+	// restic prune
+	notice(restic.Command(&Prune{}).String())
+	restic.Command(&Prune{}).Run()
+
+	// restic rebuild-index
+	notice(restic.Command(&RebuildIndex{}).String())
+	restic.Command(&RebuildIndex{}).Run()
+
+	// restic recover
+	notice(restic.Command(&Recover{}).String())
+	restic.Command(&Recover{}).Run()
+
+	// restic tag
+	notice(restic.Command(&Tag{}).String())
+	restic.Command(&Tag{}).Run()
+
+	// restic stats
+	notice(restic.Command(&Stats{
 		Tag:  []string{"mytag", "test"},
 		Host: []string{"myhost"},
 	}).String())
-	t.Log(restic.Command(&Tag{}).String())
-	t.Log(restic.Command(&Unlock{}).String())
-	t.Log(restic.Command(&Version{}).String())
-
-	restic.Run()
-	restic.Command(initC).Run()
-	restic.Command(backupC).Run()
-	restic.Command(backupC).Run()
-	restic.Command(backupC).Run()
-	restic.Command(backupC).Run()
-	restic.Command(snapshotsC).Run()
-	restic.Command(listC).Run()
-	restic.Command(cacheC).Run()
-	restic.Command(checkC).Run()
-	restic.Command(findC).Run()
-	restic.Command(forgetC).Run()
-	restic.Command(generateC).Run()
-	restic.Command(keyC).Run()
-	restic.Command(&Migrate{}).Run()
-	restic.Command(&Prune{}).Run()
-	restic.Command(&RebuildIndex{}).Run()
-	restic.Command(&Recover{}).Run()
+	restic.Command(&Tag{}).Run()
 	restic.Command(&Stats{
 		Tag:  []string{"mytag", "test"},
 		Host: []string{"myhost"},
 	}).Run()
-	restic.Command(&Tag{}).Run()
+
+	// restic unlock
+	notice(restic.Command(&Unlock{}).String())
 	restic.Command(&Unlock{}).Run()
+
+	// restic version
+	notice(restic.Command(&Version{}).String())
 	restic.Command(&Version{}).Run()
 }

@@ -19,7 +19,7 @@ type Snapshots struct {
 	Host []string `json:"--host"`
 	// --latest=0
 	// only show the last n snapshots for each host and path
-	Latest int `json:"--latest"`
+	Latest int `json:"--latest,omitempty"`
 	// --path=[]
 	// only consider snapshots for this path (can be specified multiple times)
 	Path []string `json:"--path"`

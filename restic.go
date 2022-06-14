@@ -3,6 +3,7 @@ package restic
 import (
 	"context"
 	"io"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -19,11 +20,14 @@ type Command interface {
 }
 
 type Restic struct {
-	resticName  string // like "restic", "restic_darwin_amd64"
-	globalFlags string // restic global flags
-	cmdName     string // restic sub-command name
-	cmdFlags    string // restic sub-command flags
-	cmdArgs     string // restic sub-command arguments
+	resticName  string    // like "restic", "restic_darwin_amd64"
+	globalFlags string    // restic global flags
+	cmdName     string    // restic sub-command name
+	cmdFlags    string    // restic sub-command flags
+	cmdArgs     string    // restic sub-command arguments
+	cmdPrefix   string    // add a prefix string before restic output with every line
+	cmdStdout   io.Writer // cmdStdout is an io.Writer where restic command line normal output writes to
+	cmdStderr   io.Writer // cmdStderr is an io.Writer where restic command line error output writes to
 
 	cmd *exec.Cmd
 
@@ -48,6 +52,7 @@ func New(ctx context.Context, g *GlobalFlags) (*Restic, error) {
 	return r, nil
 }
 
+// Command setup restic commmand name, command flags and command arguments.
 func (r *Restic) Command(c Command) *Restic {
 	r.cmdName = c.Name()
 	r.cmdFlags = c.Flags()
@@ -77,32 +82,36 @@ func (r *Restic) String() string {
 	return builder.String()
 }
 
+// SetOutput setup the restic command line normal output and error output.
+// stdout is an io.Writer where restic command line normal output writes to.
+// stderr is an io.Writer where restic command line error output writes to.
+// Either stdout or stderr is nil, the restic command line output still is
+// os.Stdout and os.Stderr.
+// If not call SetOutput, the default output is alas os.Stdout and os.Stderr.
+func (r *Restic) SetOutput(stdout, stderr io.Writer) {
+	r.cmdStdout = stdout
+	r.cmdStderr = stderr
+}
+
 // Run start execute restic command line
 // restic command line string returned by Restic.String() method.
 func (r *Restic) Run() error {
-	var (
-		// done is a channel that wait goroutine to output stdout and stderr.
-		done   = make(chan struct{}, 1)
-		stdout io.ReadCloser
-		stderr io.ReadCloser
-		err    error
-	)
-
 	cmdString := strings.Fields(r.String())
 	r.cmd = exec.Command(cmdString[0], cmdString[1:]...)
-	if stdout, err = r.cmd.StdoutPipe(); err != nil {
-		return err
-	}
-	if stderr, err = r.cmd.StderrPipe(); err != nil {
-		return err
+
+	// setup r.cmd's stdout and stderr
+	if r.cmdStdout != nil && r.cmdStderr != nil {
+		r.cmd.Stdout = r.cmdStdout
+		r.cmd.Stderr = r.cmdStderr
+	} else {
+		r.cmdStdout = os.Stdout
+		r.cmdStderr = os.Stderr
 	}
 
-	if err = r.cmd.Start(); err != nil {
+	if err := r.cmd.Start(); err != nil {
 		return err
 	}
-	print(stdout, stderr, done)
-	<-done
-	if err = r.cmd.Wait(); err != nil {
+	if err := r.cmd.Wait(); err != nil {
 		return err
 	}
 
