@@ -85,6 +85,16 @@ func concat(f interface{}) string {
 		//nam := v.Type().Field(i).Name
 		tag := t.Field(i).Tag.Get("json")
 
+		if !v.IsValid() {
+			continue
+		}
+		if v.IsZero() {
+			continue
+		}
+		// If json tag have multiple values, the frist value separated by "," is
+		// restic flag name.
+		tag = strings.Split(tag, ",")[0]
+
 		_ = knd
 		_ = typ
 		_ = val
