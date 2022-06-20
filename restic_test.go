@@ -40,6 +40,9 @@ func TestRestic(t *testing.T) {
 	}
 	notice := color.New(color.Bold, color.FgGreen).PrintfFunc()
 
+	notice("\n\n----- test restic default output.\n\n")
+	testRestic(t, restic)
+
 	notice("\n\n----- test restic output to custom logger.\n\n")
 	l := logrus.New()
 	logw := l.Writer()
@@ -47,11 +50,8 @@ func TestRestic(t *testing.T) {
 	restic.SetOutput(logw, logw)
 	testRestic(t, restic)
 
-	notice("\n\n----- test restic default output.\n\n")
-	testRestic(t, restic)
-
-	restic.SetOutput(os.Stdout, os.Stderr)
 	notice("\n\n----- test restic output to os.Stdout and os.Stderr.\n\n")
+	restic.SetOutput(os.Stdout, os.Stderr)
 	testRestic(t, restic)
 
 	stdoutFile, err := os.Create("/tmp/restic_stdout.log")

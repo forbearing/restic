@@ -104,8 +104,8 @@ func (r *Restic) Run() error {
 		r.cmd.Stdout = r.cmdStdout
 		r.cmd.Stderr = r.cmdStderr
 	} else {
-		r.cmdStdout = os.Stdout
-		r.cmdStderr = os.Stderr
+		r.cmd.Stdout = os.Stdout
+		r.cmd.Stderr = os.Stderr
 	}
 
 	if err := r.cmd.Start(); err != nil {
