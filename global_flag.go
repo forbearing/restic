@@ -29,10 +29,10 @@ type GlobalFlags struct {
 	KeyHint string `json:"--key-hint"`
 	// --limit-download=0
 	// limits downloads to a maximum rate in KiB/s. (default: unlimited)
-	LimitDownload int64 `json:"--limit-download"`
+	LimitDownload int64 `json:"--limit-download,omitempty"`
 	// --limit-upload=0
 	// limits uploads to a maximum rate in KiB/s. (default: unlimited)
-	LimitUpload int64 `json:"--limit-upload"`
+	LimitUpload int64 `json:"--limit-upload,omitempty"`
 	// --no-cache[=false]
 	// do not use a local cache
 	NoCache bool `json:"--no-cache"`
@@ -41,7 +41,7 @@ type GlobalFlags struct {
 	NoLock bool `json:"--no-lock"`
 	// -o, --option=[]
 	// set extended option (key=value, can be specified multiple times)
-	Option map[string]string `json:"--option"`
+	Option map[string]string `json:"--option,omitempty"`
 	// --password-command=""
 	// shell command to obtain the repository password from (default: $RESTIC_PASSWORD_COMMAND)
 	PasswordCommand string `json:"--password-command"`
@@ -62,7 +62,7 @@ type GlobalFlags struct {
 	TlsClientCert string `json:"--tls-client-cert"`
 	// -v, --verbose[=0]
 	// be verbose (specify multiple times or a level using --verbose=n, max level/times is 3)
-	Verbose int `json:"--verbose"`
+	Verbose int `json:"--verbose,omitempty"`
 
 	args strings.Builder
 }
@@ -71,7 +71,7 @@ type GlobalFlags struct {
 //     https://stackoverflow.com/questions/42294015/how-to-use-go-reflection-pkg-to-get-the-type-of-a-slice-struct-field
 // Concat implements interface Flag
 func (g *GlobalFlags) Flags() string {
-	return concat(g)
+	return concatFlags(g)
 }
 
 func (g *GlobalFlags) Name() string {
@@ -81,10 +81,3 @@ func (g *GlobalFlags) Name() string {
 func (g *GlobalFlags) Args() string {
 	return strings.TrimSpace(g.args.String())
 }
-
-//func (g *GlobalFlags) SetArgs(args ...string) string {
-//    for _, s := range args {
-//        g.args.WriteString(s + " ")
-//    }
-//    return g.Args()
-//}
