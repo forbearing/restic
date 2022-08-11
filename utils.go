@@ -67,10 +67,19 @@ func print(stdout, stderr io.ReadCloser, done chan struct{}) {
 
 // concatFlags will concatenates all restic command flags into string.
 // "omitempty" tag works on "int", "int32", "int64" and "map[string]string" types.
-func concatFlags(f interface{}) string {
-	var s string
-	t := reflect.TypeOf(f).Elem()
-	v := reflect.ValueOf(f).Elem()
+func concatFlags(flags interface{}) string {
+	var (
+		t reflect.Type
+		v reflect.Value
+		s string
+	)
+	if reflect.ValueOf(flags).Kind() == reflect.Pointer {
+		t = reflect.TypeOf(flags).Elem()
+		v = reflect.ValueOf(flags).Elem()
+	} else {
+		t = reflect.TypeOf(flags)
+		v = reflect.ValueOf(flags)
+	}
 
 	for i := 0; i < v.NumField(); i++ {
 		// PkgPath is the package path that qualified a lows case (unexported)
