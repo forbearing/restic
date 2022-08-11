@@ -79,7 +79,7 @@ func concat(f interface{}) string {
 			continue
 		}
 		knd := v.Field(i).Kind()
-		typ := v.Field(i).Type().String()
+		typ := v.Field(i).Type()
 		val := v.Field(i).Interface()
 		nam := t.Field(i).Name
 		//nam := v.Type().Field(i).Name
@@ -93,7 +93,7 @@ func concat(f interface{}) string {
 		}
 		// If json tag have multiple values, the frist value separated by "," is
 		// restic flag name.
-		tag = strings.Split(tag, ",")[0]
+		flagName := strings.Split(tag, ",")[0]
 
 		_ = knd
 		_ = typ
@@ -101,55 +101,55 @@ func concat(f interface{}) string {
 		_ = nam
 		_ = tag
 
-		switch typ {
+		switch typ.String() {
 		case "string":
-			l, ok := val.(string)
+			flagValue, ok := val.(string)
 			if ok {
-				if len(l) == 0 {
+				if len(flagValue) == 0 {
 					continue
 				}
-				s = s + " " + tag + "=" + l
+				s = s + " " + flagName + "=" + flagValue
 				s = strings.TrimSpace(s)
 			}
 		case "[]string":
-			l, ok := val.([]string)
+			flagValue, ok := val.([]string)
 			if ok {
-				if l == nil {
+				if flagValue == nil {
 					continue
 				}
-				s = s + " " + tag + "=" + strings.Join(l, ",")
+				s = s + " " + flagName + "=" + strings.Join(flagValue, ",")
 				s = strings.TrimSpace(s)
 			}
 		case "int":
-			l, ok := val.(int)
+			flagValue, ok := val.(int)
 			if ok {
-				s = s + " " + tag + "=" + strconv.Itoa(l)
+				s = s + " " + flagName + "=" + strconv.Itoa(flagValue)
 				s = strings.TrimSpace(s)
 			}
 		case "int64":
-			l, ok := val.(int64)
+			flagValue, ok := val.(int64)
 			if ok {
-				s = s + " " + tag + "=" + strconv.FormatInt(l, 10)
+				s = s + " " + flagName + "=" + strconv.FormatInt(flagValue, 10)
 				s = strings.TrimSpace(s)
 			}
 		case "bool":
-			l, ok := val.(bool)
+			flagValue, ok := val.(bool)
 			if ok {
-				if l == false {
+				if flagValue == false {
 					continue
 				}
-				s = s + " " + tag
+				s = s + " " + flagName
 				s = strings.TrimSpace(s)
 			}
 		case "map[string]string":
-			l, ok := val.(map[string]string)
+			flagValue, ok := val.(map[string]string)
 			if ok {
 				var ts string
-				for key, val := range l {
+				for key, val := range flagValue {
 					ts = ts + key + "=" + val + ","
 				}
 				ts = strings.TrimSuffix(ts, ",")
-				s = s + " " + tag + "=" + ts
+				s = s + " " + flagName + "=" + ts
 				s = strings.TrimSpace(s)
 			}
 		}
