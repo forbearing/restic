@@ -66,6 +66,7 @@ func print(stdout, stderr io.ReadCloser, done chan struct{}) {
 }
 
 // concat restic command all flags
+// "omitempty" tag is valid for type "int", "int32", "int64" and "map[string]string"
 func concat(f interface{}) string {
 	var s string
 	t := reflect.TypeOf(f).Elem()
@@ -94,6 +95,7 @@ func concat(f interface{}) string {
 		// If json tag have multiple values, the frist value separated by "," is
 		// restic flag name.
 		flagName := strings.Split(tag, ",")[0]
+		omitempty := strings.Contains(tag, "omitempty")
 
 		_ = knd
 		_ = typ
@@ -123,12 +125,27 @@ func concat(f interface{}) string {
 		case "int":
 			flagValue, ok := val.(int)
 			if ok {
+				if flagValue == 0 && omitempty {
+					continue
+				}
 				s = s + " " + flagName + "=" + strconv.Itoa(flagValue)
+				s = strings.TrimSpace(s)
+			}
+		case "int32":
+			flagValue, ok := val.(int32)
+			if ok {
+				if flagValue == 0 && omitempty {
+					continue
+				}
+				s = s + " " + flagName + "=" + strconv.FormatInt(int64(flagValue), 10)
 				s = strings.TrimSpace(s)
 			}
 		case "int64":
 			flagValue, ok := val.(int64)
 			if ok {
+				if flagValue == 0 && omitempty {
+					continue
+				}
 				s = s + " " + flagName + "=" + strconv.FormatInt(flagValue, 10)
 				s = strings.TrimSpace(s)
 			}
@@ -144,6 +161,9 @@ func concat(f interface{}) string {
 		case "map[string]string":
 			flagValue, ok := val.(map[string]string)
 			if ok {
+				if len(flagValue) == 0 && omitempty {
+					continue
+				}
 				var ts string
 				for key, val := range flagValue {
 					ts = ts + key + "=" + val + ","
