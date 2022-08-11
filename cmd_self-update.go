@@ -21,21 +21,13 @@ type SelfUpdate struct {
 	GlobalFlags
 }
 
-func (s *SelfUpdate) Flags() string {
-	return concatFlags(s)
-}
+func (s SelfUpdate) Name() string  { return "self-update" }
+func (s SelfUpdate) Flags() string { return concatFlags(s) }
+func (s SelfUpdate) Args() string  { return strings.TrimSpace(s.args.String()) }
 
-func (s *SelfUpdate) Name() string {
-	return "self-update"
-}
-
-func (s *SelfUpdate) Args() string {
-	return strings.TrimSpace(s.args.String())
-}
-
-func (s *SelfUpdate) SetArgs(args ...string) string {
+func (s SelfUpdate) SetArgs(args ...string) *SelfUpdate {
 	for _, str := range args {
 		s.args.WriteString(str + " ")
 	}
-	return s.Args()
+	return &s
 }

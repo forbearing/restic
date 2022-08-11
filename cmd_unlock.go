@@ -18,20 +18,13 @@ type Unlock struct {
 	GlobalFlags
 }
 
-func (u *Unlock) Flags() string {
-	return concatFlags(u)
-}
+func (u Unlock) Name() string  { return "unlock" }
+func (u Unlock) Flags() string { return concatFlags(u) }
+func (u Unlock) Args() string  { return strings.TrimSpace(u.args.String()) }
 
-func (u *Unlock) Name() string {
-	return "unlock"
-}
-
-func (u *Unlock) Args() string {
-	return strings.TrimSpace(u.args.String())
-}
-func (u *Unlock) SetArgs(args ...string) string {
+func (u Unlock) SetArgs(args ...string) *Unlock {
 	for _, s := range args {
 		u.args.WriteString(s + " ")
 	}
-	return u.Args()
+	return &u
 }

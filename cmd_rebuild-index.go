@@ -19,21 +19,13 @@ type RebuildIndex struct {
 	GlobalFlags
 }
 
-func (r *RebuildIndex) Flags() string {
-	return concatFlags(r)
-}
+func (r RebuildIndex) Name() string  { return "rebuild-index" }
+func (r RebuildIndex) Flags() string { return concatFlags(r) }
+func (r RebuildIndex) Args() string  { return strings.TrimSpace(r.args.String()) }
 
-func (r *RebuildIndex) Name() string {
-	return "rebuild-index"
-}
-
-func (r *RebuildIndex) Args() string {
-	return strings.TrimSpace(r.args.String())
-}
-
-func (r *RebuildIndex) SetArgs(args ...string) string {
+func (r RebuildIndex) SetArgs(args ...string) *RebuildIndex {
 	for _, s := range args {
 		r.args.WriteString(s + " ")
 	}
-	return r.Args()
+	return &r
 }

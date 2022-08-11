@@ -93,21 +93,13 @@ type Backup struct {
 	GlobalFlags
 }
 
-func (b *Backup) Flags() string {
-	return concatFlags(b)
-}
+func (b Backup) Name() string  { return "backup" }
+func (b Backup) Flags() string { return concatFlags(b) }
+func (b Backup) Args() string  { return strings.TrimSpace(b.args.String()) }
 
-func (b *Backup) Name() string {
-	return "backup"
-}
-
-func (b *Backup) Args() string {
-	return strings.TrimSpace(b.args.String())
-}
-
-func (b *Backup) SetArgs(args ...string) string {
+func (b Backup) SetArgs(args ...string) *Backup {
 	for _, s := range args {
 		b.args.WriteString(s + " ")
 	}
-	return b.Args()
+	return &b
 }

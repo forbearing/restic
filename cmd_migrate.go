@@ -18,21 +18,13 @@ type Migrate struct {
 	GlobalFlags
 }
 
-func (m *Migrate) Flags() string {
-	return concatFlags(m)
-}
+func (m Migrate) Name() string  { return "migrate" }
+func (m Migrate) Flags() string { return concatFlags(m) }
+func (m Migrate) Args() string  { return strings.TrimSpace(m.args.String()) }
 
-func (m *Migrate) Name() string {
-	return "migrate"
-}
-
-func (m *Migrate) Args() string {
-	return strings.TrimSpace(m.args.String())
-}
-
-func (m *Migrate) SetArgs(args ...string) string {
+func (m Migrate) SetArgs(args ...string) *Migrate {
 	for _, s := range args {
 		m.args.WriteString(s + " ")
 	}
-	return m.Args()
+	return &m
 }

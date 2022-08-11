@@ -24,21 +24,13 @@ type Diff struct {
 	GlobalFlags
 }
 
-func (d *Diff) Flags() string {
-	return concatFlags(d)
-}
+func (d Diff) Name() string  { return "diff" }
+func (d Diff) Flags() string { return concatFlags(d) }
+func (d Diff) Args() string  { return strings.TrimSpace(d.args.String()) }
 
-func (d *Diff) Name() string {
-	return "diff"
-}
-
-func (d *Diff) Args() string {
-	return strings.TrimSpace(d.args.String())
-}
-
-func (d *Diff) SetArgs(args ...string) string {
+func (d Diff) SetArgs(args ...string) *Diff {
 	for _, s := range args {
 		d.args.WriteString(s + " ")
 	}
-	return d.Args()
+	return &d
 }

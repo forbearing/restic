@@ -23,21 +23,13 @@ type Key struct {
 	GlobalFlags
 }
 
-func (k *Key) Flags() string {
-	return concatFlags(k)
-}
+func (k Key) Name() string  { return "key" }
+func (k Key) Flags() string { return concatFlags(k) }
+func (k Key) Args() string  { return strings.TrimSpace(k.args.String()) }
 
-func (k *Key) Name() string {
-	return "key"
-}
-
-func (k *Key) Args() string {
-	return strings.TrimSpace(k.args.String())
-}
-
-func (k *Key) SetArgs(args ...string) string {
+func (k Key) SetArgs(args ...string) *Key {
 	for _, s := range args {
 		k.args.WriteString(s + " ")
 	}
-	return k.Args()
+	return &k
 }

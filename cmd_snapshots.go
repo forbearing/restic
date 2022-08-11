@@ -32,21 +32,13 @@ type Snapshots struct {
 	GlobalFlags
 }
 
-func (s *Snapshots) Flags() string {
-	return concatFlags(s)
-}
+func (s Snapshots) Name() string  { return "snapshots" }
+func (s Snapshots) Flags() string { return concatFlags(s) }
+func (s Snapshots) Args() string  { return strings.TrimSpace(s.args.String()) }
 
-func (s *Snapshots) Name() string {
-	return "snapshots"
-}
-
-func (s *Snapshots) Args() string {
-	return strings.TrimSpace(s.args.String())
-}
-
-func (s *Snapshots) SetArgs(args ...string) string {
+func (s Snapshots) SetArgs(args ...string) *Snapshots {
 	for _, str := range args {
 		s.args.WriteString(str + " ")
 	}
-	return s.Args()
+	return &s
 }

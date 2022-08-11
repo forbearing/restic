@@ -28,21 +28,13 @@ type Prune struct {
 	GlobalFlags
 }
 
-func (p *Prune) Flags() string {
-	return concatFlags(p)
-}
+func (p Prune) Name() string  { return "prune" }
+func (p Prune) Flags() string { return concatFlags(p) }
+func (p Prune) Args() string  { return strings.TrimSpace(p.args.String()) }
 
-func (p *Prune) Name() string {
-	return "prune"
-}
-
-func (p *Prune) Args() string {
-	return strings.TrimSpace(p.args.String())
-}
-
-func (p *Prune) SetArgs(args ...string) string {
+func (p Prune) SetArgs(args ...string) *Prune {
 	for _, s := range args {
 		p.args.WriteString(s + " ")
 	}
-	return p.Args()
+	return &p
 }

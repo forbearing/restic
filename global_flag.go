@@ -70,14 +70,13 @@ type GlobalFlags struct {
 // ref:
 //     https://stackoverflow.com/questions/42294015/how-to-use-go-reflection-pkg-to-get-the-type-of-a-slice-struct-field
 // Concat implements interface Flag
-func (g *GlobalFlags) Flags() string {
-	return concatFlags(g)
-}
+func (g GlobalFlags) Name() string  { return "" }
+func (g GlobalFlags) Flags() string { return concatFlags(g) }
+func (g GlobalFlags) Args() string  { return strings.TrimSpace(g.args.String()) }
 
-func (g *GlobalFlags) Name() string {
-	return ""
-}
-
-func (g *GlobalFlags) Args() string {
-	return strings.TrimSpace(g.args.String())
+func (g GlobalFlags) SetArgs(args ...string) *GlobalFlags {
+	for _, str := range args {
+		g.args.WriteString(str + " ")
+	}
+	return &g
 }

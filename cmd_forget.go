@@ -96,21 +96,13 @@ type Forget struct {
 	GlobalFlags
 }
 
-func (f *Forget) Flags() string {
-	return concatFlags(f)
-}
+func (f Forget) Name() string  { return "forget" }
+func (f Forget) Flags() string { return concatFlags(f) }
+func (f Forget) Args() string  { return strings.TrimSpace(f.args.String()) }
 
-func (f *Forget) Name() string {
-	return "forget"
-}
-
-func (f *Forget) Args() string {
-	return strings.TrimSpace(f.args.String())
-}
-
-func (f *Forget) SetArgs(args ...string) string {
+func (f Forget) SetArgs(args ...string) *Forget {
 	for _, s := range args {
 		f.args.WriteString(s + " ")
 	}
-	return f.Args()
+	return &f
 }

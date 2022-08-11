@@ -16,21 +16,13 @@ type Recover struct {
 	GlobalFlags
 }
 
-func (r *Recover) Flags() string {
-	return concatFlags(r)
-}
+func (r Recover) Name() string  { return "recover" }
+func (r Recover) Flags() string { return concatFlags(r) }
+func (r Recover) Args() string  { return strings.TrimSpace(r.args.String()) }
 
-func (r *Recover) Name() string {
-	return "recover"
-}
-
-func (r *Recover) Args() string {
-	return strings.TrimSpace(r.args.String())
-}
-
-func (r *Recover) SetArgs(args ...string) string {
+func (r Recover) SetArgs(args ...string) *Recover {
 	for _, s := range args {
 		r.args.WriteString(s + " ")
 	}
-	return r.Args()
+	return &r
 }

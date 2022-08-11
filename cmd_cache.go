@@ -23,21 +23,13 @@ type Cache struct {
 	GlobalFlags
 }
 
-func (c *Cache) Flags() string {
-	return concatFlags(c)
-}
+func (c Cache) Name() string  { return "cache" }
+func (c Cache) Flags() string { return concatFlags(c) }
+func (c Cache) Args() string  { return strings.TrimSpace(c.args.String()) }
 
-func (c *Cache) Name() string {
-	return "cache"
-}
-
-func (c *Cache) Args() string {
-	return strings.TrimSpace(c.args.String())
-}
-
-func (c *Cache) SetArgs(args ...string) string {
+func (c Cache) SetArgs(args ...string) *Cache {
 	for _, s := range args {
 		c.args.WriteString(s + " ")
 	}
-	return c.Args()
+	return &c
 }

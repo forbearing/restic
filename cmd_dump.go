@@ -32,21 +32,13 @@ type Dump struct {
 	GlobalFlags
 }
 
-func (d *Dump) Flags() string {
-	return concatFlags(d)
-}
+func (d Dump) Name() string  { return "dump" }
+func (d Dump) Flags() string { return concatFlags(d) }
+func (d Dump) Args() string  { return strings.TrimSpace(d.args.String()) }
 
-func (d *Dump) Name() string {
-	return "dump"
-}
-
-func (d *Dump) Args() string {
-	return strings.TrimSpace(d.args.String())
-}
-
-func (d *Dump) SetArgs(args ...string) string {
+func (d Dump) SetArgs(args ...string) *Dump {
 	for _, s := range args {
 		d.args.WriteString(s + " ")
 	}
-	return d.Args()
+	return &d
 }

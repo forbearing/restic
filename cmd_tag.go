@@ -40,21 +40,13 @@ type Tag struct {
 	GlobalFlags
 }
 
-func (t *Tag) Flags() string {
-	return concatFlags(t)
-}
+func (t Tag) Name() string  { return "tag" }
+func (t Tag) Flags() string { return concatFlags(t) }
+func (t Tag) Args() string  { return strings.TrimSpace(t.args.String()) }
 
-func (t *Tag) Name() string {
-	return "tag"
-}
-
-func (t *Tag) Args() string {
-	return strings.TrimSpace(t.args.String())
-}
-
-func (t *Tag) SetArgs(args ...string) string {
+func (t Tag) SetArgs(args ...string) *Tag {
 	for _, s := range args {
 		t.args.WriteString(s)
 	}
-	return t.Args()
+	return &t
 }

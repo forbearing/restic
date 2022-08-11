@@ -27,21 +27,13 @@ type Generate struct {
 	GlobalFlags
 }
 
-func (g *Generate) Flags() string {
-	return concatFlags(g)
-}
+func (g Generate) Name() string  { return "generate" }
+func (g Generate) Flags() string { return concatFlags(g) }
+func (g Generate) Args() string  { return strings.TrimSpace(g.args.String()) }
 
-func (g *Generate) Name() string {
-	return "generate"
-}
-
-func (g *Generate) Args() string {
-	return strings.TrimSpace(g.args.String())
-}
-
-func (g *Generate) SetArgs(args ...string) string {
+func (g Generate) SetArgs(args ...string) *Generate {
 	for _, s := range args {
 		g.args.WriteString(s + " ")
 	}
-	return g.Args()
+	return &g
 }

@@ -15,21 +15,13 @@ type List struct {
 	GlobalFlags
 }
 
-func (l *List) Flags() string {
-	return concatFlags(l)
-}
+func (l List) Name() string  { return "list" }
+func (l List) Flags() string { return concatFlags(l) }
+func (l List) Args() string  { return strings.TrimSpace(l.args.String()) }
 
-func (l *List) Name() string {
-	return "list"
-}
-
-func (l *List) Args() string {
-	return strings.TrimSpace(l.args.String())
-}
-
-func (l *List) SetArgs(args ...string) string {
+func (l List) SetArgs(args ...string) *List {
 	for _, s := range args {
 		l.args.WriteString(s + " ")
 	}
-	return l.Args()
+	return &l
 }

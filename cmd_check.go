@@ -30,21 +30,13 @@ type Check struct {
 	GlobalFlags
 }
 
-func (c *Check) Flags() string {
-	return concatFlags(c)
-}
+func (c Check) Name() string  { return "check" }
+func (c Check) Flags() string { return concatFlags(c) }
+func (c Check) Args() string  { return strings.TrimSpace(c.args.String()) }
 
-func (c *Check) Name() string {
-	return "check"
-}
-
-func (c *Check) Args() string {
-	return strings.TrimSpace(c.args.String())
-}
-
-func (c *Check) SetArgs(args ...string) string {
+func (c Check) SetArgs(args ...string) *Check {
 	for _, s := range args {
 		c.args.WriteString(s + " ")
 	}
-	return c.Args()
+	return &c
 }

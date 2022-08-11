@@ -37,21 +37,13 @@ type Init struct {
 	GlobalFlags
 }
 
-func (i *Init) Flags() string {
-	return concatFlags(i)
-}
+func (i Init) Name() string  { return "init" }
+func (i Init) Flags() string { return concatFlags(i) }
+func (i Init) Args() string  { return strings.TrimSpace(i.args.String()) }
 
-func (i *Init) Name() string {
-	return "init"
-}
-
-func (i *Init) Args() string {
-	return strings.TrimSpace(i.args.String())
-}
-
-func (i *Init) SetArgs(args ...string) string {
+func (i Init) SetArgs(args ...string) *Init {
 	for _, s := range args {
 		i.args.WriteString(s + " ")
 	}
-	return i.Args()
+	return &i
 }

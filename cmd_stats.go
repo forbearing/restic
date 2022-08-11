@@ -44,21 +44,13 @@ type Stats struct {
 	GlobalFlags
 }
 
-func (s *Stats) Flags() string {
-	return concatFlags(s)
-}
+func (s Stats) Name() string  { return "stats" }
+func (s Stats) Flags() string { return concatFlags(s) }
+func (s Stats) Args() string  { return strings.TrimSpace(s.args.String()) }
 
-func (s *Stats) Name() string {
-	return "stats"
-}
-
-func (s *Stats) Args() string {
-	return strings.TrimSpace(s.args.String())
-}
-
-func (s *Stats) SetArgs(args ...string) string {
+func (s Stats) SetArgs(args ...string) *Stats {
 	for _, str := range args {
 		s.args.WriteString(str + " ")
 	}
-	return s.Args()
+	return &s
 }

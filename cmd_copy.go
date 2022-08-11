@@ -56,21 +56,13 @@ type Copy struct {
 	GlobalFlags
 }
 
-func (c *Copy) Flags() string {
-	return concatFlags(c)
-}
+func (c Copy) Name() string  { return "copy" }
+func (c Copy) Flags() string { return concatFlags(c) }
+func (c Copy) Args() string  { return strings.TrimSpace(c.args.String()) }
 
-func (c *Copy) Name() string {
-	return "copy"
-}
-
-func (c *Copy) Args() string {
-	return strings.TrimSpace(c.args.String())
-}
-
-func (c *Copy) SetArgs(args ...string) string {
+func (c Copy) SetArgs(args ...string) *Copy {
 	for _, s := range args {
 		c.args.WriteString(s + " ")
 	}
-	return c.Args()
+	return &c
 }

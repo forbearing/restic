@@ -54,21 +54,13 @@ type Find struct {
 	GlobalFlags
 }
 
-func (f *Find) Flags() string {
-	return concatFlags(f)
-}
+func (f Find) Name() string  { return "find" }
+func (f Find) Flags() string { return concatFlags(f) }
+func (f Find) Args() string  { return strings.TrimSpace(f.args.String()) }
 
-func (f *Find) Name() string {
-	return "find"
-}
-
-func (f *Find) Args() string {
-	return strings.TrimSpace(f.args.String())
-}
-
-func (f *Find) SetArgs(args ...string) string {
+func (f Find) SetArgs(args ...string) *Find {
 	for _, s := range args {
 		f.args.WriteString(s + " ")
 	}
-	return f.Args()
+	return &f
 }

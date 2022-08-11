@@ -45,21 +45,13 @@ type Restore struct {
 	GlobalFlags
 }
 
-func (r *Restore) Flags() string {
-	return concatFlags(r)
-}
+func (r Restore) Name() string  { return "restore" }
+func (r Restore) Flags() string { return concatFlags(r) }
+func (r Restore) Args() string  { return strings.TrimSpace(r.args.String()) }
 
-func (r *Restore) Name() string {
-	return "restore"
-}
-
-func (r *Restore) Args() string {
-	return strings.TrimSpace(r.args.String())
-}
-
-func (r *Restore) SetArgs(args ...string) string {
+func (r Restore) SetArgs(args ...string) *Restore {
 	for _, s := range args {
 		r.args.WriteString(s + " ")
 	}
-	return r.Args()
+	return &r
 }

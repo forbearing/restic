@@ -14,21 +14,13 @@ type Cat struct {
 	GlobalFlags
 }
 
-func (c *Cat) Flags() string {
-	return concatFlags(c)
-}
+func (c Cat) Name() string  { return "cat" }
+func (c Cat) Flags() string { return concatFlags(c) }
+func (c Cat) Args() string  { return strings.TrimSpace(c.args.String()) }
 
-func (c *Cat) Name() string {
-	return "cat"
-}
-
-func (c *Cat) Args() string {
-	return strings.TrimSpace(c.args.String())
-}
-
-func (c *Cat) SetArgs(args ...string) string {
+func (c Cat) SetArgs(args ...string) *Cat {
 	for _, s := range args {
 		c.args.WriteString(s + " ")
 	}
-	return c.Args()
+	return &c
 }

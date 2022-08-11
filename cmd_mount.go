@@ -34,21 +34,13 @@ type Mount struct {
 	GlobalFlags
 }
 
-func (m *Mount) Flags() string {
-	return concatFlags(m)
-}
+func (m Mount) Name() string  { return "mount" }
+func (m Mount) Flags() string { return concatFlags(m) }
+func (m Mount) Args() string  { return strings.TrimSpace(m.args.String()) }
 
-func (m *Mount) Name() string {
-	return "mount"
-}
-
-func (m *Mount) Args() string {
-	return strings.TrimSpace(m.args.String())
-}
-
-func (m *Mount) SetArgs(args ...string) string {
+func (m Mount) SetArgs(args ...string) *Mount {
 	for _, s := range args {
 		m.args.WriteString(s + " ")
 	}
-	return m.Args()
+	return &m
 }

@@ -41,21 +41,13 @@ type Ls struct {
 	GlobalFlags
 }
 
-func (l *Ls) Flags() string {
-	return concatFlags(l)
-}
+func (l Ls) Name() string  { return "ls" }
+func (l Ls) Flags() string { return concatFlags(l) }
+func (l Ls) Args() string  { return strings.TrimSpace(l.args.String()) }
 
-func (l *Ls) Name() string {
-	return "ls"
-}
-
-func (l *Ls) Args() string {
-	return strings.TrimSpace(l.args.String())
-}
-
-func (l *Ls) SetArgs(args ...string) string {
+func (l Ls) SetArgs(args ...string) *Ls {
 	for _, s := range args {
 		l.args.WriteString(s + " ")
 	}
-	return l.Args()
+	return &l
 }

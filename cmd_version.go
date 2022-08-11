@@ -15,21 +15,13 @@ type Version struct {
 	GlobalFlags
 }
 
-func (v *Version) Flags() string {
-	return concatFlags(v)
-}
+func (v Version) Name() string  { return "version" }
+func (v Version) Flags() string { return concatFlags(v) }
+func (v Version) Args() string  { return strings.TrimSpace(v.args.String()) }
 
-func (v *Version) Name() string {
-	return "version"
-}
-
-func (v *Version) Args() string {
-	return strings.TrimSpace(v.args.String())
-}
-
-func (v *Version) SetArgs(args ...string) string {
+func (v Version) SetArgs(args ...string) *Version {
 	for _, s := range args {
 		v.args.WriteString(s + " ")
 	}
-	return v.Args()
+	return &v
 }
