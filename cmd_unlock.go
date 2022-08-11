@@ -2,9 +2,11 @@ package restic
 
 import "strings"
 
-// - Unlock includes all flags of "retic unlock" and inheris GlobalFlags
-// - the "unlock" command removes stale locks that have been created by other
-//   restic processes.
+// Unlock includes all flags of "retic unlock" and inheris GlobalFlags.
+// Unlock object implements the interface "Command".
+
+// the "unlock" command removes stale locks that have been created by other
+// restic processes.
 type Unlock struct {
 	// -h, --help[=false]
 	// help for unlock

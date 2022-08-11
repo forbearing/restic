@@ -2,13 +2,16 @@ package restic
 
 import "strings"
 
-// - Dump includes all flags of "restic dump" and inheris GlobalFlags
-// - The "dump" command extracts files from a snapshot from the reposi. if a single
-//   file is selected, it printing its contents o stdout. Folder are output as a
-//   tar (default) or zip file containing the contents of the specified folder.
-//   Pass "/" as file name to dump the whole snapshot as an archive file.
-// - The special snapshot "latest" can be used to use the latest snapshot in the
-//   repository.
+// Dump includes all flags of "restic dump" and inheris GlobalFlags.
+// Dump object implements the interface "Command".
+
+// The "dump" command extracts files from a snapshot from the reposi. if a single
+// file is selected, it printing its contents o stdout. Folder are output as a
+// tar (default) or zip file containing the contents of the specified folder.
+// Pass "/" as file name to dump the whole snapshot as an archive file.
+
+// The special snapshot "latest" can be used to use the latest snapshot in the
+// repository.
 type Dump struct {
 	// -a, --archive="tar"
 	// set archive format as "tar" or "zip"

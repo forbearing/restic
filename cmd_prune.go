@@ -2,9 +2,11 @@ package restic
 
 import "strings"
 
-// - Prune includes all flags of "restic prune" and inheris GlobalFlags.
-// - The "prune" command checks the repository and removes data that is not
-//   referenced and therefore not needed any more.
+// Prune includes all flags of "restic prune" and inheris GlobalFlags.
+// Prune object implements the interface "Command".
+
+// The "prune" command checks the repository and removes data that is not
+// referenced and therefore not needed any more.
 type Prune struct {
 	// -n, --dry-run[=false]
 	// do not modify the repository, just print what would be done

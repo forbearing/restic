@@ -2,11 +2,13 @@ package restic
 
 import "strings"
 
-// - Restore includes all flags of "restic restore" and inheris GlobalFlags
-// - The "restore" command extracts the data from a snapshot from the repository
-//   to a directory.
-// - The special snapshot "latest" can be used to restore the latest snapshot
-//   in the repository.
+// Restore includes all flags of "restic restore" and inheris GlobalFlags.
+// Restore object implements the interface "Command".
+
+// The "restore" command extracts the data from a snapshot from the repository
+// to a directory.
+// The special snapshot "latest" can be used to restore the latest snapshot
+// in the repository.
 type Restore struct {
 	// -e, --exclude=[]
 	// exclude a pattern (can be specified multiple times)

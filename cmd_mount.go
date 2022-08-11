@@ -2,9 +2,11 @@ package restic
 
 import "strings"
 
-// - Mount includes all flags of "restic mount" and inheris GlobalFlags
-// - The "mount" command mounts the repository via fuse to a directory.
-//   This is a read-only mount.
+// Mount includes all flags of "restic mount" and inheris GlobalFlags.
+// Mount object implements the interface "Command".
+
+// The "mount" command mounts the repository via fuse to a directory.
+// This is a read-only mount.
 type Mount struct {
 	// --allow-other[=false]
 	// allow other users to access the data in the mounted directory

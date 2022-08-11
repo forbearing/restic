@@ -2,9 +2,11 @@ package restic
 
 import "strings"
 
-// - Migrate includes all flags of "restic migrate" and inheris GlobalFlags.
-// - The "migrate" command applies migrations to a repository. When no migration
-//   name is explicitly given, a list of migrations that can be applies is printed.
+// Migrate includes all flags of "restic migrate" and inheris GlobalFlags.
+// Migrate object implements the interface "Command".
+
+// The "migrate" command applies migrations to a repository. When no migration
+// name is explicitly given, a list of migrations that can be applies is printed.
 type Migrate struct {
 	// -f, --force[=false]
 	// apply a migration a second time

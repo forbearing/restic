@@ -2,12 +2,14 @@ package restic
 
 import "strings"
 
-// - Forget includes all flags of "restic forget" and inheris GlobalFlags
-// - The "forget" command removes snapshots according to a policy. please note
-//   that this command really only deletes the snapshot object in the repository,
-//   which is a reference to data stored there. In order to remove the unreferenced
-//   data after "forget" was run successfully, see the "prune" command. Please
-//   alse read the documentation for "forget" to lean about important security considerations.
+// Forget includes all flags of "restic forget" and inheris GlobalFlags.
+// Forget object implements the interface "Command".
+
+// The "forget" command removes snapshots according to a policy. please note
+// that this command really only deletes the snapshot object in the repository,
+// which is a reference to data stored there. In order to remove the unreferenced
+// data after "forget" was run successfully, see the "prune" command. Please
+// alse read the documentation for "forget" to lean about important security considerations.
 type Forget struct {
 	// -l, --keep-last=0
 	// keep the last n snapshots

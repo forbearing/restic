@@ -2,17 +2,21 @@ package restic
 
 import "strings"
 
-// - Ls includes all flags of "restic ls" and inheris GlobalFlags
-// - The "ls" command lists files and directories in a snapshots.
-// - The special snapshot ID "latest" can be used to list files and directories
-//   of the latest snapshot in the repository. The --host flag can be used in
-//   conjunction to select the latest snapshot originating from a certain host only.
-// - File listings can optionally be filtered by directories. Any positional
-//   arguments after the snapshot ID are interpreted as absolute directory paths,
-//   and only  files  inside  those  directories will be listed. If the --recursive
-//   flag is used, then the filter will allow traversing into matching directories'
-//   subfolders. Any directory paths specified must be absolute (starting with
-//   a path separator); paths use the forward slash '/' as separator.
+// Ls includes all flags of "restic ls" and inheris GlobalFlags.
+// Ls object implements the interface "Command".
+
+// The "ls" command lists files and directories in a snapshots.
+
+// The special snapshot ID "latest" can be used to list files and directories
+// of the latest snapshot in the repository. The --host flag can be used in
+// conjunction to select the latest snapshot originating from a certain host only.
+
+// File listings can optionally be filtered by directories. Any positional
+// arguments after the snapshot ID are interpreted as absolute directory paths,
+// and only  files  inside  those  directories will be listed. If the --recursive
+// flag is used, then the filter will allow traversing into matching directories'
+// subfolders. Any directory paths specified must be absolute (starting with
+// a path separator); paths use the forward slash '/' as separator.
 type Ls struct {
 	// -h, --help[=false]
 	// help for ls

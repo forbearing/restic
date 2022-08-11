@@ -2,8 +2,10 @@ package restic
 
 import "strings"
 
-// - Cache includes all flags of "restic cache" and inheris GlobalFlags
-// - The "cache" command allows listing and cleaning local cache directories
+// Cache includes all flags of "restic cache" and inheris GlobalFlags.
+// Cache object implements the interface "Command".
+
+// The "cache" command allows listing and cleaning local cache directories.
 type Cache struct {
 	// --cleanup[=false]
 	// remove old cache directories
@@ -13,7 +15,7 @@ type Cache struct {
 	Help bool `json:"--help"`
 	// --max-age=30
 	// max age in days for cache directories to be considered old
-	MaxAge int `json:"--max-age"`
+	MaxAge int `json:"--max-age,omitempty"`
 	// --no-size[=false]
 	// do not output the size of the cache directories
 	NoSize bool `json:"--no-size"`

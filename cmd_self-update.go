@@ -2,12 +2,13 @@ package restic
 
 import "strings"
 
-// - SelfUpdate includes all flags of "restic self-update"
-//   and inheris GlobalFlags
-// - The "self-update" command downloads the latest stable release of restic
-//   from Github and replaces the currently running binary. After download,
-//   the authenticity of the binary is verified using the GPG signature on
-//   the release files.
+// SelfUpdate includes all flags of "restic self-update" and inheris GlobalFlags.
+// SelfUpdate object implements the interface "Command".
+
+// The "self-update" command downloads the latest stable release of restic
+// from Github and replaces the currently running binary. After download,
+// the authenticity of the binary is verified using the GPG signature on
+// the release files.
 type SelfUpdate struct {
 	// -h, --help[=false]
 	// help for self-update
