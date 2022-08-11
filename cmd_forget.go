@@ -13,22 +13,22 @@ import "strings"
 type Forget struct {
 	// -l, --keep-last=0
 	// keep the last n snapshots
-	KeepLast int `json:"--keep-last"`
+	KeepLast int `json:"--keep-last,omitempty"`
 	// -H, --keep-hourly=0
 	// keep the last n hourly snapshots
-	KeepHourly int `json:"--keep-hourly"`
+	KeepHourly int `json:"--keep-hourly,omitempty"`
 	// -d, --keep-daily=0
 	// keep the last n daily snapshots
-	KeepDaily int `json:"--keep-daily"`
+	KeepDaily int `json:"--keep-daily,omitempty"`
 	// -w, --keep-weekly=0
 	// keep the last n weekly snapshots
-	KeepWeekly int `json:"--keep-weekly"`
+	KeepWeekly int `json:"--keep-weekly,omitempty"`
 	// -m, --keep-monthly=0
 	// keep the last n monthly snapshots
-	KeepMonthly int `json:"--keep-monthly"`
+	KeepMonthly int `json:"--keep-monthly,omitempty"`
 	// -y, --keep-yearly=0
 	// keep the last n yearly snapshots
-	KeepYearly int `json:"--keep-yearly"`
+	KeepYearly int `json:"--keep-yearly,omitempty"`
 	// --keep-within=
 	// keep snapshots that are newer than duration (eg. 1y5m7d2h)
 	// relative to the latest snapshot
