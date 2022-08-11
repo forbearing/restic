@@ -24,7 +24,7 @@ type Cache struct {
 }
 
 func (c *Cache) Flags() string {
-	return concat(c)
+	return concatFlags(c)
 }
 
 func (c *Cache) Name() string {

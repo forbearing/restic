@@ -41,7 +41,7 @@ type Tag struct {
 }
 
 func (t *Tag) Flags() string {
-	return concat(t)
+	return concatFlags(t)
 }
 
 func (t *Tag) Name() string {

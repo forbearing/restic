@@ -45,7 +45,7 @@ type Stats struct {
 }
 
 func (s *Stats) Flags() string {
-	return concat(s)
+	return concatFlags(s)
 }
 
 func (s *Stats) Name() string {

@@ -15,7 +15,7 @@ type Cat struct {
 }
 
 func (c *Cat) Flags() string {
-	return concat(c)
+	return concatFlags(c)
 }
 
 func (c *Cat) Name() string {

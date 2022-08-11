@@ -28,7 +28,7 @@ type Generate struct {
 }
 
 func (g *Generate) Flags() string {
-	return concat(g)
+	return concatFlags(g)
 }
 
 func (g *Generate) Name() string {

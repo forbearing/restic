@@ -55,7 +55,7 @@ type Find struct {
 }
 
 func (f *Find) Flags() string {
-	return concat(f)
+	return concatFlags(f)
 }
 
 func (f *Find) Name() string {

@@ -42,7 +42,7 @@ type Ls struct {
 }
 
 func (l *Ls) Flags() string {
-	return concat(l)
+	return concatFlags(l)
 }
 
 func (l *Ls) Name() string {

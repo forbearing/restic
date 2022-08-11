@@ -97,7 +97,7 @@ type Forget struct {
 }
 
 func (f *Forget) Flags() string {
-	return concat(f)
+	return concatFlags(f)
 }
 
 func (f *Forget) Name() string {

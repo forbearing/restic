@@ -94,7 +94,7 @@ type Backup struct {
 }
 
 func (b *Backup) Flags() string {
-	return concat(b)
+	return concatFlags(b)
 }
 
 func (b *Backup) Name() string {

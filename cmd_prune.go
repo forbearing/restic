@@ -29,7 +29,7 @@ type Prune struct {
 }
 
 func (p *Prune) Flags() string {
-	return concat(p)
+	return concatFlags(p)
 }
 
 func (p *Prune) Name() string {

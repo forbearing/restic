@@ -17,7 +17,7 @@ type Recover struct {
 }
 
 func (r *Recover) Flags() string {
-	return concat(r)
+	return concatFlags(r)
 }
 
 func (r *Recover) Name() string {

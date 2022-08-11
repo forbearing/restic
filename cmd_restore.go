@@ -46,7 +46,7 @@ type Restore struct {
 }
 
 func (r *Restore) Flags() string {
-	return concat(r)
+	return concatFlags(r)
 }
 
 func (r *Restore) Name() string {

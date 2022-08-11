@@ -16,7 +16,7 @@ type Version struct {
 }
 
 func (v *Version) Flags() string {
-	return concat(v)
+	return concatFlags(v)
 }
 
 func (v *Version) Name() string {

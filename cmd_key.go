@@ -24,7 +24,7 @@ type Key struct {
 }
 
 func (k *Key) Flags() string {
-	return concat(k)
+	return concatFlags(k)
 }
 
 func (k *Key) Name() string {

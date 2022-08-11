@@ -19,7 +19,7 @@ type Migrate struct {
 }
 
 func (m *Migrate) Flags() string {
-	return concat(m)
+	return concatFlags(m)
 }
 
 func (m *Migrate) Name() string {

@@ -35,7 +35,7 @@ type Mount struct {
 }
 
 func (m *Mount) Flags() string {
-	return concat(m)
+	return concatFlags(m)
 }
 
 func (m *Mount) Name() string {

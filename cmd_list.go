@@ -16,7 +16,7 @@ type List struct {
 }
 
 func (l *List) Flags() string {
-	return concat(l)
+	return concatFlags(l)
 }
 
 func (l *List) Name() string {

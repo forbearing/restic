@@ -19,7 +19,7 @@ type Unlock struct {
 }
 
 func (u *Unlock) Flags() string {
-	return concat(u)
+	return concatFlags(u)
 }
 
 func (u *Unlock) Name() string {

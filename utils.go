@@ -65,9 +65,9 @@ func print(stdout, stderr io.ReadCloser, done chan struct{}) {
 	done <- struct{}{}
 }
 
-// concat restic command all flags
-// "omitempty" tag is valid for type "int", "int32", "int64" and "map[string]string"
-func concat(f interface{}) string {
+// concatFlags will concatenates all restic command flags into string.
+// "omitempty" tag works on "int", "int32", "int64" and "map[string]string" types.
+func concatFlags(f interface{}) string {
 	var s string
 	t := reflect.TypeOf(f).Elem()
 	v := reflect.ValueOf(f).Elem()

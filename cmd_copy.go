@@ -57,7 +57,7 @@ type Copy struct {
 }
 
 func (c *Copy) Flags() string {
-	return concat(c)
+	return concatFlags(c)
 }
 
 func (c *Copy) Name() string {

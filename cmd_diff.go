@@ -25,7 +25,7 @@ type Diff struct {
 }
 
 func (d *Diff) Flags() string {
-	return concat(d)
+	return concatFlags(d)
 }
 
 func (d *Diff) Name() string {

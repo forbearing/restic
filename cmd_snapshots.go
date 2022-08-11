@@ -33,7 +33,7 @@ type Snapshots struct {
 }
 
 func (s *Snapshots) Flags() string {
-	return concat(s)
+	return concatFlags(s)
 }
 
 func (s *Snapshots) Name() string {

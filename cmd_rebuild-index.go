@@ -20,7 +20,7 @@ type RebuildIndex struct {
 }
 
 func (r *RebuildIndex) Flags() string {
-	return concat(r)
+	return concatFlags(r)
 }
 
 func (r *RebuildIndex) Name() string {

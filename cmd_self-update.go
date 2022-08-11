@@ -22,7 +22,7 @@ type SelfUpdate struct {
 }
 
 func (s *SelfUpdate) Flags() string {
-	return concat(s)
+	return concatFlags(s)
 }
 
 func (s *SelfUpdate) Name() string {

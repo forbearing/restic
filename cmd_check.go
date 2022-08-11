@@ -31,7 +31,7 @@ type Check struct {
 }
 
 func (c *Check) Flags() string {
-	return concat(c)
+	return concatFlags(c)
 }
 
 func (c *Check) Name() string {

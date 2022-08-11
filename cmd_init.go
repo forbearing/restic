@@ -38,7 +38,7 @@ type Init struct {
 }
 
 func (i *Init) Flags() string {
-	return concat(i)
+	return concatFlags(i)
 }
 
 func (i *Init) Name() string {

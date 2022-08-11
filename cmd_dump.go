@@ -33,7 +33,7 @@ type Dump struct {
 }
 
 func (d *Dump) Flags() string {
-	return concat(d)
+	return concatFlags(d)
 }
 
 func (d *Dump) Name() string {
