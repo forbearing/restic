@@ -177,12 +177,3 @@ func concat(f interface{}) string {
 
 	return s
 }
-
-// concatFlags will concat restic and it's sub-commands all flags
-func concatAll(cl ...Command) string {
-	var s string
-	for _, c := range cl {
-		s = s + c.Flags()
-	}
-	return s
-}
