@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/sirupsen/logrus"
@@ -67,6 +68,16 @@ func TestRestic(t *testing.T) {
 	restic.SetOutput(stdoutFile, stderrFile)
 	notice("\n\n----- test restic output to file.\n\n")
 	testRestic(t, restic)
+
+	notice("\n\n----- test run restic command with timeoutable context.\n\n")
+	ctx2, cancel2 := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel2()
+	restic2, err := New(ctx2, globalF)
+	if err != nil {
+		t.Error(err)
+	}
+	restic2.SetOutput(os.Stdout, os.Stderr)
+	testRestic(t, restic2)
 }
 
 func testRestic(t *testing.T, restic *Restic) {
