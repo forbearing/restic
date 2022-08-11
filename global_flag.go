@@ -2,9 +2,8 @@ package restic
 
 import "strings"
 
-// - GlobalFlags includes all restic global flags.
-// - Restic is a backup system which allows saving multiple revisions of files
-//   and directories in an encrypted repository stored on different backends.
+// GlobalFlags includes all restic global flags.
+// GlobalFlags object implements the interface "Command".
 type GlobalFlags struct {
 	// --cacert=[]
 	// file to load root certificates from (default: use system certificates)
@@ -69,7 +68,7 @@ type GlobalFlags struct {
 
 // ref:
 //     https://stackoverflow.com/questions/42294015/how-to-use-go-reflection-pkg-to-get-the-type-of-a-slice-struct-field
-// Concat implements interface Flag
+
 func (g GlobalFlags) Name() string  { return "" }
 func (g GlobalFlags) Flags() string { return concatFlags(g) }
 func (g GlobalFlags) Args() string  { return strings.TrimSpace(g.args.String()) }
