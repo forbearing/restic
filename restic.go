@@ -41,6 +41,7 @@ type Restic struct {
 func New(ctx context.Context, g *GlobalFlags) (*Restic, error) {
 	r := new(Restic)
 
+	r.ctx = ctx
 	path, err := exec.LookPath("restic")
 	if err != nil {
 		return nil, err
