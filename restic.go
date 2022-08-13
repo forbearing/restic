@@ -87,8 +87,7 @@ func (r *Restic) String() string {
 // stdout is an io.Writer where restic command line normal output writes to.
 // stderr is an io.Writer where restic command line error output writes to.
 // Either stdout or stderr is nil, the restic command line output still is
-// os.Stdout and os.Stderr.
-// If not call SetOutput, the default output is alas os.Stdout and os.Stderr.
+// os.Stdout and os.Stderr, default are os.Stdout and os.Stderr.
 func (r *Restic) SetOutput(stdout, stderr io.Writer) {
 	r.cmdStdout = stdout
 	r.cmdStderr = stderr
