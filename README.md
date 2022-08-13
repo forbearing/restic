@@ -1,1 +1,1 @@
-restic lib
+A wrapper for the backup tools restc
