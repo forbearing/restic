@@ -6,7 +6,7 @@ import (
 
 // Backup includes all flags of "restic backup" and inheris GlobalFlags.
 // Backup object implements the interface "Command".
-
+//
 // The "backup" command creates a new snapshot and saves the files and directories.
 type Backup struct {
 	// -n, --dry-run[=false]

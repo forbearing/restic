@@ -4,7 +4,7 @@ import "strings"
 
 // Dump includes all flags of "restic dump" and inheris GlobalFlags.
 // Dump object implements the interface "Command".
-
+//
 // The "dump" command extracts files from a snapshot from the reposi. if a single
 // file is selected, it printing its contents o stdout. Folder are output as a
 // tar (default) or zip file containing the contents of the specified folder.

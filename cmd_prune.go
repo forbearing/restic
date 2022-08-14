@@ -4,7 +4,7 @@ import "strings"
 
 // Prune includes all flags of "restic prune" and inheris GlobalFlags.
 // Prune object implements the interface "Command".
-
+//
 // The "prune" command checks the repository and removes data that is not
 // referenced and therefore not needed any more.
 type Prune struct {

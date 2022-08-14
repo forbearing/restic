@@ -4,7 +4,7 @@ import "strings"
 
 // Cache includes all flags of "restic cache" and inheris GlobalFlags.
 // Cache object implements the interface "Command".
-
+//
 // The "cache" command allows listing and cleaning local cache directories.
 type Cache struct {
 	// --cleanup[=false]

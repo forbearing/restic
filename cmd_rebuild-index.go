@@ -4,7 +4,7 @@ import "strings"
 
 // RebuildIndex includes all flags of "restic rebuild-index" and inheris GlobalFlags.
 // RebuildIndex object implements the interface "Command".
-
+//
 // The "rebuild-index" command creates a new index based on the pack files
 // in the repository.
 type RebuildIndex struct {

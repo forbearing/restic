@@ -4,7 +4,7 @@ import "strings"
 
 // Forget includes all flags of "restic forget" and inheris GlobalFlags.
 // Forget object implements the interface "Command".
-
+//
 // The "forget" command removes snapshots according to a policy. please note
 // that this command really only deletes the snapshot object in the repository,
 // which is a reference to data stored there. In order to remove the unreferenced

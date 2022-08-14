@@ -4,7 +4,7 @@ import "strings"
 
 // Init includes all flags of "restic init" and inheris GlobalFlags.
 // Init object implements the interface "Command".
-
+//
 // The "init" command initializes a new repository.
 type Init struct {
 	// --copy-chunker-params[=false]

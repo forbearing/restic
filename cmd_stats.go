@@ -4,17 +4,17 @@ import "strings"
 
 // Stats includes all flags of "restic stats" and inheris GlobalFlags.
 // Stats object implements the interface "Command".
-
+//
 // The "stats" command walks one or multiple snapshots in a repository and
 // accumulates statistics about the data stored therein. It reports on the
 // number of unique files and their sizes, according to one of the counting
 // modes as given by the --mode flag.
-
+//
 // It Operates on all snapshots matching the selection criteria or all snapshots
 // if northing is specified. the special snapshot ID "latest" is also supported.
 // some modes make more sense over just a single snapshot, while others are
 // useful across all snapshots, depending on what you are trying to calculate.
-
+//
 // The mods are:
 //     o restore-size: (default) Counts the size of the restored files.
 //     o files-by-contents: Counts total size of files, where a file is

@@ -4,7 +4,7 @@ import "strings"
 
 // Diff includes all flags of "restic diff" and inheris GlobalFlags.
 // Diff object implements the interface "Command".
-
+//
 // The "diff" command show differences from the first to the second snapshot.
 // the first characters in each line display what was has happened to a
 // particular file or directory:

@@ -4,7 +4,7 @@ import "strings"
 
 // Cat includes all flags of "restic cat" and inheris GlobalFlags.
 // Cat object implements the interface "Command".
-
+//
 // The "cat" command is used to print internal objects to stdout.
 type Cat struct {
 	// -h, --help[=false]

@@ -4,7 +4,7 @@ import "strings"
 
 // Mount includes all flags of "restic mount" and inheris GlobalFlags.
 // Mount object implements the interface "Command".
-
+//
 // The "mount" command mounts the repository via fuse to a directory.
 // This is a read-only mount.
 type Mount struct {

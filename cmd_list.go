@@ -4,7 +4,7 @@ import "strings"
 
 // List includes all flags of "restic list" and inheris GlobalFlags.
 // List object implements the interface "Command".
-
+//
 // The "list" command allows listing objects in the repository based on type.
 // Usage restic list [flags] [blobs|packs|index|snapshots|keys|locks].
 type List struct {

@@ -4,7 +4,7 @@ import "strings"
 
 // Generate includes all flags of "restic generate" and inheris GlobalFlags.
 // Generate object implements the interface "Command".
-
+//
 // The "generate" command writes automatically generated files (like the man pages
 // and the auto-completion files for bash, fish and zsh).
 type Generate struct {

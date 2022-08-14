@@ -4,10 +4,10 @@ import "strings"
 
 // Check includes all flags of "restic check" and inheris GlobalFlags.
 // Check object implements the interface "Command".
-
+//
 // The "check" command tests the repository for errors and reports any errors it finds.
 // It can also be used to read all data and therefore simulate a restore.
-
+//
 // By default, the "check" command will always load all data directly from the
 // repository and not use a local cache.
 type Check struct {

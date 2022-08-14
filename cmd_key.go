@@ -4,7 +4,7 @@ import "strings"
 
 // Key includes all flags of "restic key" and inheris GlobalFlags.
 // Key object implements the interface "Command".
-
+//
 // The "key" command manages keys(passwords) for accessing the repository.
 type Key struct {
 	// -h, --help[=false]

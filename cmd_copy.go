@@ -4,14 +4,14 @@ import "strings"
 
 // Copy includes all flags of "restic copy" and inheris GlobalFlags.
 // Copy object implements the interface "Command".
-
+//
 // The "Copy" command copies one or more snapshots from one repository to another.
-
+//
 // NOTE:  This  process  will have to both download (read) and upload (write)
 // the entire snapshot(s) due to the different encryption keys used in the source
 // and destination repositories. This /may incur higher bandwidth usage and
 // costs/ than expected during normal backup runs.
-
+//
 // NOTE: The copying process does not re-chunk files, which may break deduplication
 // between the files copied and files already  stored  in  the  destination repository.
 // This means that copied files, which existed in both the source and destination

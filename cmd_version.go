@@ -4,7 +4,7 @@ import "strings"
 
 // Version includes all flags of "restic version" and inheris GlobalFlags.
 // Version object object implements the interface "Command".
-
+//
 // The "version" command prints detailed information about the restic environment
 // and the version of the software.
 type Version struct {

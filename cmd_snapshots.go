@@ -4,7 +4,7 @@ import "strings"
 
 // Snapshots includes all flags of "restic snapshots" and inheris GlobalFlags.
 // Snapshots object implements the interface "Command".
-
+//
 // The "snapshots" command list all snapshots stored in the repository.
 type Snapshots struct {
 	// -c, --compact[=false]

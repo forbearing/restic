@@ -6,7 +6,7 @@ import (
 
 // Find includes all flags of "restic find" and inheris GlobalFlags.
 // Find object implements the interface "Command".
-
+//
 // The "find" command searches for files and directories in snapshots stored in
 // the repo. It can also be used to search for blobs or trees for troubleshooting.
 type Find struct {

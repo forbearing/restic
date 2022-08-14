@@ -4,7 +4,7 @@ import "strings"
 
 // Migrate includes all flags of "restic migrate" and inheris GlobalFlags.
 // Migrate object implements the interface "Command".
-
+//
 // The "migrate" command applies migrations to a repository. When no migration
 // name is explicitly given, a list of migrations that can be applies is printed.
 type Migrate struct {

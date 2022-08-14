@@ -4,7 +4,7 @@ import "strings"
 
 // Tag includes all flags of "restic tag" and inheris GlobalFlags.
 // Tag object implements the interface "Command".
-
+//
 // The "tag" command allows you to modify tags on existing snapshots.
 // You can set/replace the entire set of tags on a snapshots, or add tags to/remove
 ///tags from the existing set.
