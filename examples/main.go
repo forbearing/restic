@@ -47,8 +47,8 @@ func main() {
 		Tag:  []string{"mytag", "test"},
 	}.SetArgs(backupSource1, backupSource2)).Run()
 	fmt.Println(r)
-	r.Run()
-	r.Run()
+	r.Run() // backup data again.
+	r.Run() // backup data again and again.
 
 	// execute `restic snapshots` command
 	r.Command(&restic.Snapshots{
