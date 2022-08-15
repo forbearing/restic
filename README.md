@@ -4,7 +4,7 @@ A wrapper for the backup tools restc
 
 ## Installation
 
-` go get github.com/forbearing/restic@v1.1.1`
+` go get github.com/forbearing/restic@v1.2.0`
 
 ## How to use this lib
 
