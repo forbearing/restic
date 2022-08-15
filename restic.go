@@ -48,7 +48,9 @@ func New(ctx context.Context, g *GlobalFlags) (*Restic, error) {
 	}
 	r.resticName = filepath.Base(path)
 
-	r.globalFlags = g.Flags()
+	if g != nil {
+		r.globalFlags = g.Flags()
+	}
 
 	return r, nil
 }
