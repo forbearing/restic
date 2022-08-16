@@ -38,21 +38,49 @@ type Restic struct {
 }
 
 // New returns a restic instance.
+// It will return error if command "restic" not found
 func New(ctx context.Context, g *GlobalFlags) (*Restic, error) {
 	r := new(Restic)
-
 	r.ctx = ctx
 	path, err := exec.LookPath("restic")
 	if err != nil {
 		return nil, err
 	}
 	r.resticName = filepath.Base(path)
-
 	if g != nil {
 		r.globalFlags = g.Flags()
 	}
 
 	return r, nil
+}
+
+// NewIgnoreNotFound returns a restic instance, if
+// It's doesn't matter whether command "restic" exists.
+func NewIgnoreNotFound(ctx context.Context, g *GlobalFlags) *Restic {
+	r := new(Restic)
+	r.ctx = ctx
+	if g != nil {
+		r.globalFlags = g.Flags()
+	}
+
+	return r
+}
+
+// NewOrDie returns a restic instance.
+// It will panic if has any error.
+func NewOrDie(ctx context.Context, g *GlobalFlags) *Restic {
+	r := new(Restic)
+	r.ctx = ctx
+	path, err := exec.LookPath("restic")
+	if err != nil {
+		panic(err)
+	}
+	r.resticName = filepath.Base(path)
+	if g != nil {
+		r.globalFlags = g.Flags()
+	}
+
+	return r
 }
 
 // Command setup restic commmand name, command flags and command arguments.
