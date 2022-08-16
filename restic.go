@@ -54,7 +54,7 @@ func New(ctx context.Context, g *GlobalFlags) (*Restic, error) {
 	return r, nil
 }
 
-// NewIgnoreNotFound returns a restic instance, if
+// NewIgnoreNotFound returns a restic instance.
 // It's doesn't matter whether command "restic" exists.
 func NewIgnoreNotFound(ctx context.Context, g *GlobalFlags) *Restic {
 	r := new(Restic)
