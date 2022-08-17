@@ -46,7 +46,7 @@ type GlobalFlags struct {
 	PasswordCommand string `json:"--password-command"`
 	// -p, --password-file=""
 	// file to read the repository password from (default: $RESTIC_PASSWORD_FILE)
-	PasswordFile string `json:"--passwod-file"`
+	PasswordFile string `json:"--password-file"`
 	// -q, --quiet[=false]
 	// do not output comprehensive progress report
 	Quiet bool `json:"--quiet"`
