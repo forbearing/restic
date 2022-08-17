@@ -50,7 +50,6 @@ func New(ctx context.Context, g *GlobalFlags) (*Restic, error) {
 	if g != nil {
 		r.globalFlags = g.Flags()
 	}
-
 	return r, nil
 }
 
@@ -62,7 +61,7 @@ func NewIgnoreNotFound(ctx context.Context, g *GlobalFlags) *Restic {
 	if g != nil {
 		r.globalFlags = g.Flags()
 	}
-
+	r.resticName = "restic"
 	return r
 }
 
