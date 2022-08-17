@@ -5,10 +5,11 @@ import (
 	"io"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 	"sync"
 )
+
+const ResticCommandName = "restic"
 
 // Name return command name.
 // Flags return the command all concatenated flags.
@@ -20,7 +21,7 @@ type Command interface {
 }
 
 type Restic struct {
-	resticName  string    // like "restic", "restic_darwin_amd64"
+	resticName  string    // restic command name, like "restic", "restic_darwin_amd64"
 	globalFlags string    // restic global flags
 	cmdName     string    // restic sub-command name
 	cmdFlags    string    // restic sub-command flags
@@ -30,6 +31,7 @@ type Restic struct {
 	cmdStderr   io.Writer // cmdStderr is an io.Writer where restic command line error output writes to
 
 	cmd *exec.Cmd
+	env map[string]string
 
 	finished bool
 	ctx      context.Context
@@ -37,20 +39,26 @@ type Restic struct {
 	l        sync.Mutex
 }
 
+// NewOrDie returns a restic instance.
+// It will panic if there has any error.
+func NewOrDie(ctx context.Context, g *GlobalFlags) *Restic {
+	_, err := exec.LookPath(ResticCommandName)
+	if err != nil {
+		panic(err)
+	}
+	r, _ := New(ctx, g)
+	return r
+}
+
 // New returns a restic instance.
-// It will return error if command "restic" not found
+// It will return error if command "restic" not found.
 func New(ctx context.Context, g *GlobalFlags) (*Restic, error) {
-	r := new(Restic)
-	r.ctx = ctx
-	path, err := exec.LookPath("restic")
+	_, err := exec.LookPath(ResticCommandName)
 	if err != nil {
 		return nil, err
 	}
-	r.resticName = filepath.Base(path)
-	if g != nil {
-		r.globalFlags = g.Flags()
-	}
-	return r, nil
+
+	return NewIgnoreNotFound(ctx, g), nil
 }
 
 // NewIgnoreNotFound returns a restic instance.
@@ -58,27 +66,12 @@ func New(ctx context.Context, g *GlobalFlags) (*Restic, error) {
 func NewIgnoreNotFound(ctx context.Context, g *GlobalFlags) *Restic {
 	r := new(Restic)
 	r.ctx = ctx
+	r.cmd = exec.Command(ResticCommandName)
+	r.resticName = ResticCommandName
+	r.env = make(map[string]string)
 	if g != nil {
 		r.globalFlags = g.Flags()
 	}
-	r.resticName = "restic"
-	return r
-}
-
-// NewOrDie returns a restic instance.
-// It will panic if has any error.
-func NewOrDie(ctx context.Context, g *GlobalFlags) *Restic {
-	r := new(Restic)
-	r.ctx = ctx
-	path, err := exec.LookPath("restic")
-	if err != nil {
-		panic(err)
-	}
-	r.resticName = filepath.Base(path)
-	if g != nil {
-		r.globalFlags = g.Flags()
-	}
-
 	return r
 }
 
@@ -92,6 +85,7 @@ func (r *Restic) Command(c Command) *Restic {
 
 // String returns restic commmand line
 // such like "restic --limit-upload=0 -v=0 snapshots --tag=mytag --host=myhost"
+// The restic command line = "restic" + global flags + subcommand name + subcommand flags + subcommand args
 func (r *Restic) String() string {
 	builder := new(strings.Builder)
 
@@ -127,6 +121,7 @@ func (r *Restic) SetOutput(stdout, stderr io.Writer) {
 func (r *Restic) Run() error {
 	cmdString := strings.Fields(r.String())
 	r.cmd = exec.Command(cmdString[0], cmdString[1:]...)
+	r.cmd.Env = envMapToSlice(r.env)
 
 	// setup r.cmd's stdout and stderr
 	if r.cmdStdout != nil && r.cmdStderr != nil {
@@ -145,4 +140,10 @@ func (r *Restic) Run() error {
 	}
 
 	return nil
+}
+
+// SetEnv
+func (r *Restic) SetEnv(key, value string) *Restic {
+	r.env[key] = value
+	return r
 }
