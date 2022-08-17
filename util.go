@@ -186,3 +186,16 @@ func concatFlags(flags interface{}) string {
 
 	return s
 }
+
+// envMapToSlice convert a map containing environment variables to silce.
+func envMapToSlice(envMap map[string]string) []string {
+	if envMap == nil {
+		return nil
+	}
+
+	var envSlice []string
+	for k, v := range envMap {
+		envSlice = append(envSlice, k+"="+v)
+	}
+	return envSlice
+}
