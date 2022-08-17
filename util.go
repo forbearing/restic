@@ -199,3 +199,31 @@ func envMapToSlice(envMap map[string]string) []string {
 	}
 	return envSlice
 }
+
+// deduplicateStrSlice removes duplicates in string slice.
+// ref: https://stackoverflow.com/questions/66643946/how-to-remove-duplicates-strings-or-int-from-slice-in-go
+func deduplicateStrSlice(strSlice []string) []string {
+	allKeys := make(map[string]bool)
+	var newSlice []string
+	for _, item := range strSlice {
+		if _, value := allKeys[item]; !value {
+			allKeys[item] = true
+			newSlice = append(newSlice, item)
+		}
+	}
+	return newSlice
+}
+
+// deduplicateIntSlice reomves duplicates in int slice.
+// ref: https://stackoverflow.com/questions/66643946/how-to-remove-duplicates-strings-or-int-from-slice-in-go
+func deduplicateIntSlice(intSlice []int) []int {
+	allKeys := make(map[int]bool)
+	var newSlice []int
+	for _, item := range intSlice {
+		if _, value := allKeys[item]; !value {
+			allKeys[item] = true
+			newSlice = append(newSlice, item)
+		}
+	}
+	return newSlice
+}
