@@ -57,7 +57,6 @@ func New(ctx context.Context, g *GlobalFlags) (*Restic, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return NewIgnoreNotFound(ctx, g), nil
 }
 

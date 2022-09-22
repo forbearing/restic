@@ -66,7 +66,7 @@ func print(stdout, stderr io.ReadCloser, done chan struct{}) {
 }
 
 // concatFlags will concatenates all restic command flags into string.
-// "omitempty" tag works on "int", "int32", "int64" and "map[string]string" types.
+// "omitempty" tag works on "int", "int32", "int64" , []string and "map[string]string" types.
 func concatFlags(flags interface{}) string {
 	var (
 		t reflect.Type
@@ -128,6 +128,9 @@ func concatFlags(flags interface{}) string {
 				if flagValue == nil {
 					continue
 				}
+				if len(flagValue) == 0 && omitempty {
+					continue
+				}
 				s = s + " " + flagName + "=" + strings.Join(flagValue, ",")
 				s = strings.TrimSpace(s)
 			}
@@ -170,6 +173,9 @@ func concatFlags(flags interface{}) string {
 		case "map[string]string":
 			flagValue, ok := val.(map[string]string)
 			if ok {
+				if flagValue == nil {
+					continue
+				}
 				if len(flagValue) == 0 && omitempty {
 					continue
 				}
