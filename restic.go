@@ -102,7 +102,8 @@ func (r *Restic) String() string {
 		builder.WriteString(r.cmdArgs)
 	}
 
-	return builder.String()
+	// if restic command flag don't have argument. we should trim the last space letter.
+	return strings.TrimSpace(builder.String())
 }
 
 // SetOutput setup the restic command line normal output and error output.
