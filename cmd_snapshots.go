@@ -18,16 +18,16 @@ type Snapshots struct {
 	Help bool `json:"--help"`
 	// -H, --host=[]
 	// only consider snapshots for this host (can be specified multiple times)
-	Host []string `json:"--host"`
+	Host []string `json:"--host,omitempty"`
 	// --latest=0
 	// only show the last n snapshots for each host and path
 	Latest int `json:"--latest,omitempty"`
 	// --path=[]
 	// only consider snapshots for this path (can be specified multiple times)
-	Path []string `json:"--path"`
+	Path []string `json:"--path,omitempty"`
 	// --tag=[]
 	// only consider snapshots which include this taglist in the format tag[,tag,...] (can be specified multiple times)
-	Tag []string `json:"--tag"`
+	Tag []string `json:"--tag,omitempty"`
 
 	args strings.Builder
 
